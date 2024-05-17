@@ -15,6 +15,7 @@ def rating(jb_description,resume_dict):
 #use this function when the user give a seprate file for critical keyword
 def rating2(jb_description,resume_dict,critical_keywords):
     score_dict={}
+    critical_keywords=lemmatize_text(critical_keywords)
     for key,resume in resume_dict.items():
         lemmatized_resume=lemmatize_text(resume)
         match_score=calculate_match_score(critical_list=critical_keywords,text_list=lemmatized_resume)
