@@ -81,7 +81,29 @@
     #submit-button{
         margin:10px;
     }
+    table {
+        width: 40%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        border: 1px solid #dddddd; 
+    }
 
+    th {
+        background-color: #f2f2f2;
+        text-align: left;
+        padding: 8px;
+        border: 1px solid #dddddd; 
+    }
+    td {
+        padding: 8px;
+        border: 1px solid #dddddd; 
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    tr:hover {
+        background-color: #f5f5f5;
+    }
 </style>
 </head>
 <body>
@@ -114,9 +136,9 @@
                 </div>
                 <button class="button" onclick="uploadResume()">Add</button>
                 <button class="button" id="submit-button">Submit</button>
-                <div id="resume-list-div">
-                    <p>no files selected</p>
-                </div>
+                <table id="resume-list-div">
+                    <tr><td>No File Selected</td></tr>
+                </table>
             </div>
         </div>
 </div>
@@ -234,10 +256,10 @@
           request.onsuccess = (event) => {
               const allItems = event.target.result;
               const list=document.getElementById('resume-list-div');
-              list.innerHTML='';
+              list.innerHTML='<th>Selected Files</th>';
               for(let i=0;i<allItems.length;i++)
               {
-                  const Text='<p>'+allItems[i].name+'</p>';
+                  const Text='<tr><td>'+allItems[i].name+'</td></tr>';
                   list.innerHTML=list.innerHTML+Text;
               }
           }
