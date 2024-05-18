@@ -9,6 +9,7 @@
         display:flex;
         flex-direction:column;
         align-items:center;
+        margin:10px;
     }
     .uploading{
         display:flex;
@@ -19,13 +20,15 @@
     #jb,#resume{
         display:flex;
         width:100%;
+        flex-direction:column;
+        align-items:center;
     }
     #resume{
        display:none;
     }
     .file-upload,.file-upload-text {
         display:flex;
-        width:100%;
+        width:75%;
         border: 2px dashed #ccc;
         border-radius:10px;
         border-color:blue;
@@ -83,8 +86,11 @@
 </head>
 <body>
 <div class="container">
+    <button class="button" id='continue-button' onclick="go_to_resume()">continue</button>
+    <button class="button" id='previous-button' onclick="go_to_jb()">previous</button>
         <div class="uploading">
             <div id="jb">
+                <h2>Job Description</h2>
                 <div class="file-upload">
                     <label for="job-description" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
                     <input type="file" id="job-description" accept=".pdf,.docx">
@@ -95,34 +101,56 @@
                     <button onClick="disable_text(this)">upload or drop</button>
                 </div>
             </div>
-
-
             <div id="resume">
+                <h2>Resume Upload</h2>
                 <div class="file-upload">
                     <label for="resume-content" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
-                    <input type="file" id="resume-content" accept=".pdf,.docx">
+                    <input type="file" id="resume-content" accept=".pdf,.docx" multiple>
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
                 <div class="file-upload-text">
                     <textarea id="resumes-content" placeholder="Type or paste resumes here"></textarea>
                     <button onClick="disable_text(this)">upload or drop</button>
                 </div>
+                <button class="button" onclick="uploadResume()">Add</button>
+                <button class="button" id="submit-button">Submit</button>
+                <div id="resume-list-div">
+                    <p>no files selected</p>
+                </div>
             </div>
         </div>
-    <button class="button" id='continue-button' onclick="go_to_resume()">continue</button>
-    <button class="button" id='previous-button' onclick="go_to_jb()">previous</button>
-    <button class="button" id="submit-button">Submit</button>
 </div>
 
 <script>
     // Function to handle file uploads
+    const dbName = "resume_list";
+    const dbVersion = 2;
+    const deleteRequest=indexedDB.deleteDatabase(dbName);
+    deleteRequest.onsucess=(event)=>{
+        console.log('Indexed Cleared');
+      }
+    deleteRequest.onerror=(event)=>{
+        console.log('error:',event.target.error);
+      }
+    const request = indexedDB.open(dbName, dbVersion);
+    request.onerror = (event) => {
+      console.error("Error opening IndexedDB:", event.target.error);
+    }
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      const objectStore = db.createObjectStore("resumes", { autoIncrement: true, keyPath: "id" });
+    };
     function disable_file(button){
+        var file_=button.previousElementSibling;
+        file_.value=''
         var div_=button.parentElement;
         div_.style.display='none';
         var div_next_sibling=div_.nextElementSibling;
         div_next_sibling.style.display='flex'
     }
     function disable_text(button){
+        var textarea_=button.previousElementSibling;
+        textarea_.value=''
         var div_=button.parentElement;
         div_.style.display='none';
         var div_next_sibling=div_.previousElementSibling;
@@ -147,6 +175,76 @@
         resume.style.display='none'
         continue_button.style.display='block'
         previous_button.style.display='none'
+    }
+    function uploadResume() {
+        const fileInput = document.getElementById('resume-content')
+        const selectedFiles = fileInput.files;
+        if(selectedFiles.length==0){
+          alert('Select some file')
+        }
+        else{
+          const dbName = "resume_list";
+          const request = indexedDB.open(dbName);
+          request.onsuccess = async (event) => {
+            const db = event.target.result;
+            const fileReadPromises=[]
+            for (let i = 0; i < selectedFiles.length; i++) {
+              const file=selectedFiles[i]
+              var v=0;
+              const fileReadPromise=await new Promise((resolve,reject)=>{
+                  v=i;
+                  const reader= new FileReader()
+                  reader.onload=(event)=>{
+                    resolve({name: file.name,content:event.target.result})
+                  }
+                  reader.onerror=(event)=>{
+                    reject(event.target.error)
+                  }
+                  reader.readAsText(file)
+                })
+              fileReadPromises.push(fileReadPromise)
+            }
+            try{
+              const fileContents=await Promise.all(fileReadPromises)
+              const transaction = db.transaction(["resumes"], "readwrite");
+              const objectStore = transaction.objectStore("resumes");
+              fileContents.forEach(fileData=>{
+                objectStore.add(fileData)
+              })
+              transaction.oncomplete = () => {
+                console.log("Files stored in IndexedDB successfully!");
+                showUploadedResume();
+                fileInput.value=''
+              }
+            }
+            catch(error){
+              console.log(error);
+            }
+          }
+        }
+      }
+      function showUploadedResume() {
+        const dbName = "resume_list";
+        const request = indexedDB.open(dbName);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(["resumes"], "readonly"); // Corrected mode
+            const objectStore = transaction.objectStore("resumes");
+            const request = objectStore.getAll();
+          request.onsuccess = (event) => {
+              const allItems = event.target.result;
+              const list=document.getElementById('resume-list-div');
+              list.innerHTML='';
+              for(let i=0;i<allItems.length;i++)
+              {
+                  const Text='<p>'+allItems[i].name+'</p>';
+                  list.innerHTML=list.innerHTML+Text;
+              }
+          }
+          request.onerror = (event) => {
+            console.error('Error retrieving items:', event.target.error);
+          }
+        }
     }
 </script>
 
