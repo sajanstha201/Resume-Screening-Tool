@@ -131,7 +131,7 @@
             <div id="jb">
                 <h2>Job Description</h2>
                 <div class="file-upload">
-                    <label for="job-description" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
+                    <label for="job-description-file" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
                     <input type="file" id="job-description-file" accept=".pdf,.docx">
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
@@ -387,14 +387,21 @@
         const job_desc_pdf=document.getElementById('job-description-file')
         const job_desc_text=document.getElementById('job-description-text')
         const job_descripton_file=job_desc_pdf.files[0]
-        console.log(job_descripton_file)
-        if(job_desc_text.value.trim()!=0)
+        if(job_descripton_file.name!='')
+        {
+            const file_job_description=job_desc_pdf.files[0]
+            const reader = new FileReader()
+            reader.onload=(e)=>{
+                const file_content=e.target.result
+                job_description_details={name:job_descripton_file.name,content:file_content}
+            }
+            
+        }
+        else if(job_desc_text.value.trim()!=0)
         {
             job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
         }
-        console.log(job_description_details.name)
-        console.log(job_description_details.content)
-
+        console.log(job_description_details)
     }
 
 
