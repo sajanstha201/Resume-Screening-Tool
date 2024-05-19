@@ -115,11 +115,11 @@
                 <h2>Job Description</h2>
                 <div class="file-upload">
                     <label for="job-description" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
-                    <input type="file" id="job-description" accept=".pdf,.docx">
+                    <input type="file" id="job-description-file" accept=".pdf,.docx">
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
                 <div class="file-upload-text">
-                    <textarea id="job-description" placeholder="Type or paste resumes here"></textarea>
+                    <textarea id="job-description-text" placeholder="Type or paste resumes here"></textarea>
                     <button onClick="disable_text(this)">upload or drop</button>
                 </div>
             </div>
@@ -127,7 +127,7 @@
                 <h2>Resume Upload</h2>
                 <div class="file-upload">
                     <label for="resume-content-file" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
-                    <input onchange="showSelectedResumeName(this)"type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
+                    <input onchange="showSelectedResumeName(this)" type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
                 <div class="file-upload-text">
@@ -149,6 +149,7 @@
 </div>
 
 <script>
+    let job_description_details={name:'',content:''}
     const dbName = "resume_list";
     const dbVersion = 2;
     const deleteRequest=indexedDB.deleteDatabase(dbName);
@@ -183,6 +184,7 @@
         div_next_sibling.style.display='flex'
     }
     function go_to_resume(){
+        get_job_description()
         var jb=document.getElementById('jb')
         var resume=document.getElementById('resume')
         var continue_button=document.getElementById('continue-button')
@@ -262,7 +264,7 @@
             }
             catch(error){
               console.log(error);
-            }
+            } 
             }
             request.onerror=(event)=>{
                 console.error(event.target.error);
@@ -341,6 +343,22 @@
         }
         
     }
+    function get_job_description()
+    {
+        const job_desc_pdf=document.getElementById('job-description-file')
+        const job_desc_text=document.getElementById('job-description-text')
+        const job_descripton_file=job_desc_pdf.files[0]
+        console.log(job_descripton_file)
+        if(job_desc_text.value.trim()!=0)
+        {
+            job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
+        }
+        console.log(job_description_details.name)
+        console.log(job_description_details.content)
+
+    }
+
+
 </script>
 
 </body>
