@@ -171,7 +171,9 @@
 
 <script>
     let resume_file_activate=true;
-    let job_description_details={name:'',content:''}
+    let jb_file_activate=true;
+    let jb_description_selected=false;
+    let job_description_details
     const dbName = "resume_list";
     const dbVersion = 2;
     const deleteRequest=indexedDB.deleteDatabase(dbName);
@@ -191,6 +193,7 @@
     };
     function disable_file(button){
         resume_file_activate=false;
+        jb_file_activate=false;
         var file_=button.previousElementSibling;
         file_.value=''
         var div_=button.parentElement;
@@ -199,6 +202,8 @@
         div_next_sibling.style.display='flex'
     }
     function disable_text(button){
+        resume_file_activate=true;
+        jb_file_activate=true;
         var textarea_=button.previousElementSibling;
         textarea_.value=''
         var div_=button.parentElement;
@@ -207,8 +212,11 @@
         div_next_sibling.style.display='flex'
     }
     function go_to_resume(){
+        get_job_description();
+        if(!jb_description_selected){
+            return;
+        }
         resume_file_activate=true;
-        get_job_description()
         var jb=document.getElementById('jb')
         var resume=document.getElementById('resume')
         var continue_button=document.getElementById('continue-button')
@@ -229,6 +237,7 @@
         previous_button.style.display='none'
     }
     function uploadResume() {
+        console.log(job_description_details)
         const fileInput=document.getElementById('resume-content-file')
         const textInput=document.getElementById('resume-content-text')
         const selectedFiles = fileInput.files;
@@ -399,24 +408,32 @@
     {
         const job_desc_pdf=document.getElementById('job-description-file')
         const job_desc_text=document.getElementById('job-description-text')
-        const job_descripton_file=job_desc_pdf.files[0]
-        if(job_descripton_file.name!='')
+        const job_description_files=job_desc_pdf.files
+        if(jb_file_activate)
         {
-            const file_job_description=job_desc_pdf.files[0]
-            const reader = new FileReader()
-            reader.onload=(e)=>{
-                const file_content=e.target.result
-                job_description_details={name:job_descripton_file.name,content:file_content}
+            if(job_description_files.length===0){
+                alert("no file selected");
+                return;
             }
-            
+            jb_description_selected=true;
+            const reader = new FileReader()
+            reader.onload=(event)=>{
+                const file_content=event.target.result
+                job_description_details={name:job_description_files[0].name,content:file_content}
+            }
+            reader.onerror=(event)=>{
+                console.error(event.target.error)
+            }
+            reader.readAsText(job_description_files[0])
         }
-        else if(job_desc_text.value.trim()!=0)
-        {
+        else{
+            if(job_desc_text.value.trim()===""){
+                alert("empty textarea")
+                return;
+            }
+            jb_description_selected=true;
             job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
         }
-        
-        console.log(job_description_details)
-
     }
 
 
