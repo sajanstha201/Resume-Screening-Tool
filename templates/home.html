@@ -131,7 +131,7 @@
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
                 <div class="file-upload-text">
-                    <textarea id="resumes-content-text" placeholder="Type or paste resumes here"></textarea>
+                    <textarea id="resume-content-text" placeholder="Type or paste resumes here"></textarea>
                     <button onClick="disable_text(this)">upload or drop</button>
                 </div>
                 <button class="button" onclick="uploadResume()">Add</button>
@@ -201,11 +201,27 @@
     function uploadResume() {
         const fileInput = document.getElementById('resume-content-file')
         const textInput=document.getElementById('resume-content-text')
+        console.log(textInput.value)
         const selectedFiles = fileInput.files;
-        if(selectedFiles.length==0){
-          alert('Select some file')
+        const dbName = "resume_list";
+        const request = indexedDB.open(dbName);
+        if(textInput.value.trim()!=""){
+          request.onsuccess=(event)=>{
+            const db=event.target.result;
+            const transaction=db.transaction(["resumes"],"readwrite");
+            const objectStore=transaction.objectStore("resumes")
+            objectStore.add({name:textInput.value.slice(0,20),content:textInput.value})
+            transaction.oncomplete=(event)=>{
+                console.log("Text resume added to the database");
+                showUploadedResume()
+                textInput.value=''
+            }
+          }
+          request.onerror=(event)=>{
+            console.error(event.target.error)
+          }
         }
-        else{
+        else if(selectedFiles.length!=0){
           const dbName = "resume_list";
           const request = indexedDB.open(dbName);
           request.onsuccess = async (event) => {
@@ -243,7 +259,10 @@
             catch(error){
               console.log(error);
             }
-          }
+            }
+            request.onerror=(event)=>{
+                console.error(event.target.error);
+            }
         }
       }
       function showUploadedResume() {
