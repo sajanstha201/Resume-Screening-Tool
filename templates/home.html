@@ -112,13 +112,15 @@
         flex-direction:row;
     }
     .pdf-img{
-        width:70px;
-        height:80px;
-        background-color:blue;
+        background-color:lightblue;
         border:2px solid blue;
         border-radius:5px;
         margin:10px;
         padding:10px;
+    }
+    .pdf-img p{
+        width:70px;
+        height:90px;
         overflow:hidden;
     }
 </style>
@@ -168,6 +170,7 @@
 </div>
 
 <script>
+    let resume_file_activate=true;
     let job_description_details={name:'',content:''}
     const dbName = "resume_list";
     const dbVersion = 2;
@@ -187,6 +190,7 @@
       const objectStore = db.createObjectStore("resumes", { autoIncrement: true, keyPath: "id" });
     };
     function disable_file(button){
+        resume_file_activate=false;
         var file_=button.previousElementSibling;
         file_.value=''
         var div_=button.parentElement;
@@ -203,6 +207,7 @@
         div_next_sibling.style.display='flex'
     }
     function go_to_resume(){
+        resume_file_activate=true;
         get_job_description()
         var jb=document.getElementById('jb')
         var resume=document.getElementById('resume')
@@ -230,7 +235,11 @@
         console.log(selectedFiles)
         const dbName = "resume_list";
         const request = indexedDB.open(dbName);
-        if(textInput.value.trim()!=""){
+        if(!resume_file_activate){
+            if(textInput.value.trim()===""){
+                alert("Empty textarea");
+                return;
+            }
           request.onsuccess=(event)=>{
             const db=event.target.result;
             const transaction=db.transaction(["resumes"],"readwrite");
@@ -246,7 +255,11 @@
             console.error(event.target.error)
           }
         }
-        else if(selectedFiles.length!=0){
+        else{
+            if(selectedFiles.length===0){
+                alert("No file selected");
+                return;
+            }
           const dbName = "resume_list";
           const request = indexedDB.open(dbName);
           request.onsuccess = async (event) => {
@@ -362,13 +375,13 @@
         const instance_list=document.getElementById('instance-upload-file')
         if(files.length>4){
             for( let i=0;i<5;i++){
-                instance_list.innerHTML+="<div class='pdf-img'>"+files[i].name+"</div>"
+                instance_list.innerHTML+="<div class='pdf-img'><p>"+files[i].name+"</p></div>"
             }
-            instance_list.innerHTML+="<div class='pdf-img'> . . . </div>"
+            instance_list.innerHTML+="<div class='pdf-img'><p> . . . </p></div>"
         }
         else{
             for( let i=0;i<files.length;i++){
-                instance_list.innerHTML+="<div class='pdf-img'>"+files[i].name+"</div>"
+                instance_list.innerHTML+="<div class='pdf-img'><p>"+files[i].name+"</p></div>"
             }
         }
     }
