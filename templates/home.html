@@ -127,7 +127,7 @@
                 <h2>Resume Upload</h2>
                 <div class="file-upload">
                     <label for="resume-content-file" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
-                    <input type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
+                    <input onchange="showSelectedResumeName(this)"type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
                 <div class="file-upload-text">
@@ -327,6 +327,18 @@
             }    
         }
         
+        
+    }
+    function showSelectedResumeName(input_)
+    {
+        const label=document.getElementById("resume-content-label")
+        const files=input_.files
+        label.innerHTML=`<p>selected files</p>`
+        for(let i=0;i<files.length;i++)
+        {
+            label.innerHTML=label.innerHTML+`<p>${files[i].name}</p>`
+            
+        }
         
     }
 </script>
