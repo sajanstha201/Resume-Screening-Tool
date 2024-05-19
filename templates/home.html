@@ -137,14 +137,18 @@
                 <button class="button" onclick="uploadResume()">Add</button>
                 <button class="button" id="submit-button">Submit</button>
                 <table id="resume-list-div">
-                    <tr><td>No File Selected</td></tr>
+                    <th>
+                        <tr>file name</tr>
+                    </th>
+                    <tr>
+                        <td>No File Selected</td>
+                    </tr>
                 </table>
             </div>
         </div>
 </div>
 
 <script>
-    // Function to handle file uploads
     const dbName = "resume_list";
     const dbVersion = 2;
     const deleteRequest=indexedDB.deleteDatabase(dbName);
@@ -251,16 +255,17 @@
         const request = indexedDB.open(dbName);
         request.onsuccess = (event) => {
             const db = event.target.result;
-            const transaction = db.transaction(["resumes"], "readonly"); // Corrected mode
+            const transaction = db.transaction(["resumes"], "readonly"); 
             const objectStore = transaction.objectStore("resumes");
             const request = objectStore.getAll();
           request.onsuccess = (event) => {
               const allItems = event.target.result;
               const list=document.getElementById('resume-list-div');
-              list.innerHTML='<th>Selected Files</th>';
+              list.innerHTML='<tr><th>Selected Files</th><th>action</th></tr>';
               for(let i=0;i<allItems.length;i++)
-              {
-                  const Text='<tr><td>'+allItems[i].name+'</td></tr>';
+              {   
+                  id="btn_"+i
+                  const Text = '<tr><td>' + allItems[i].name + '</td><td><button type="button" id="'+id+'"onclick="remove_pdf(this)"> remove</button></td></tr>';
                   list.innerHTML=list.innerHTML+Text;
               }
           }
@@ -268,6 +273,42 @@
             console.error('Error retrieving items:', event.target.error);
           }
         }
+    }
+    function remove_pdf(event)
+    {
+        let primary_key
+        const row=event.closest('tr')
+        const cells = row.getElementsByTagName('td');
+        const pdf_name=cells[0].textContent
+        const dbName = "resume_list";
+        const request = indexedDB.open(dbName);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(["resumes"], "readwrite"); 
+            const objectStore = transaction.objectStore("resumes");
+            objectStore.openCursor().onsuccess=(event)=>{
+                const cursor=event.target.result
+                if(cursor)
+                {
+                    if(cursor.value.name===pdf_name)
+                    {
+                        const cursor_request=cursor.delete();
+                        cursor_request.onsuccess=()=>{
+                            showUploadedResume();
+                        }
+
+                    }
+                    else{
+                        cursor.continue();
+                    }
+                }
+            }
+            transaction.oncomplete=()=>{
+                console.log("delete transaction complete")
+            }    
+        }
+        
+        
     }
 </script>
 
