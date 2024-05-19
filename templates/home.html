@@ -126,12 +126,12 @@
             <div id="resume">
                 <h2>Resume Upload</h2>
                 <div class="file-upload">
-                    <label for="resume-content" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
-                    <input type="file" id="resume-content" accept=".pdf,.docx" multiple>
+                    <label for="resume-content-file" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
+                    <input type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
                     <button onClick="disable_file(this)"> copy paste</button>
                 </div>
                 <div class="file-upload-text">
-                    <textarea id="resumes-content" placeholder="Type or paste resumes here"></textarea>
+                    <textarea id="resumes-content-text" placeholder="Type or paste resumes here"></textarea>
                     <button onClick="disable_text(this)">upload or drop</button>
                 </div>
                 <button class="button" onclick="uploadResume()">Add</button>
@@ -199,7 +199,8 @@
         previous_button.style.display='none'
     }
     function uploadResume() {
-        const fileInput = document.getElementById('resume-content')
+        const fileInput = document.getElementById('resume-content-file')
+        const textInput=document.getElementById('resume-content-text')
         const selectedFiles = fileInput.files;
         if(selectedFiles.length==0){
           alert('Select some file')
