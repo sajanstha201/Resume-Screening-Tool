@@ -21,11 +21,11 @@
 }
 .file-upload,.file-upload-text {
     display:flex;
-    width:75%;
+    width:80%;
     border: 2px dashed #ccc;
     border-radius:10px;
     border-color:blue;
-    padding: 20px;
+    padding: 10px;
     align-items:center;
     justify-content:center;
     height:200px;
@@ -102,15 +102,16 @@ tr:hover {
     display:flex;
 }
 .pdf-img{
-    background-color:lightblue;
-    border:2px solid blue;
     border-radius:10px;
     margin:10px;
     padding:10px;
+    background: #d4edda;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 .pdf-img p{
-    width:70px;
-    height:80px;
+    width:80px;
+    height:100px;
     overflow:hidden;
     padding:0px;
     margin:0px;
@@ -132,7 +133,7 @@ tr:hover {
 }
 #instance-file-cross-button{
     position:relative;
-    left:63px;
+    left:73px;
     top:-7px;
 }
 #instance-jb-cross-button{
@@ -147,12 +148,13 @@ tr:hover {
     display: none;
     width:30%;
     height:60%;
-    background-color: lightblue;
-    border: 2px solid black;
     border-radius: 10px;
     padding: 20px;
     align-items: center;
     justify-content: center;
+    background: #d4edda;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 #alert-box{
     position:absolute;

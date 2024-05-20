@@ -321,6 +321,7 @@ function display_jb_description_file(display_folder){
         jb_description_selected=false;
     }
 }
+//this will remove the alert box when cross button is clicked
 function remove_alert_box(){
     blur_div=document.getElementById('blur-box');
     alert_div=document.getElementById('alert-box');
@@ -328,7 +329,7 @@ function remove_alert_box(){
     alert_div.style.display='none';
     alert_div.style.opacity=0;
 }
-
+//this is popout the alert message when some alert need to popout in window
 function alert_message(message){
     var alert_div=document.getElementById('alert-box')
     var blur_div=document.getElementById('blur-box');
