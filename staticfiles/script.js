@@ -1,7 +1,7 @@
 let resume_file_activate=true;
 let jb_file_activate=true;
 let jb_description_selected=false;
-let job_description_details={name:'',content:''}
+let job_description_details
 const dbName = "resume_list";
 const dbVersion = 2;
 const deleteRequest=indexedDB.deleteDatabase(dbName);
@@ -43,12 +43,10 @@ function disable_text(button){
 }
 //this is for going to the resume upload area
 function go_to_resume(){
+    display_jb_description_file(true)
     get_job_description();
     if(!jb_description_selected){
         return;
-    }
-    if(jb_file_activate){
-        display_jb_description_file(true);
     }
     resume_file_activate=true;
     var jb=document.getElementById('jb')
@@ -73,9 +71,11 @@ function go_to_jb(){
 }
 // this is for uploading the selected file in the table
 function uploadResume() {
+    console.log(job_description_details)
     const fileInput=document.getElementById('resume-content-file')
     const textInput=document.getElementById('resume-content-text')
     const selectedFiles = fileInput.files;
+    console.log(selectedFiles)
     const dbName = "resume_list";
     const request = indexedDB.open(dbName);
     if(!resume_file_activate){
@@ -221,13 +221,13 @@ function showSelectedResumeName(input_)
     instance_list.innerHTML=""
     if(files.length>4){
         for( let i=0;i<5;i++){
-            instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+            instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
         }
         instance_list.innerHTML+="<div class='pdf-img'><p> . . . </p></div>"
     }
     else{
         for( let i=0;i<files.length;i++){
-            instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+            instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
         }
         if(files.length===0){
             label.style.display="block";
@@ -256,7 +256,6 @@ function get_job_description()
     if(jb_file_activate)
     {
         if(job_description_files.length===0){
-            jb_description_selected=false;
             alert("no file selected");
             return;
         }
@@ -273,7 +272,6 @@ function get_job_description()
     }
     else{
         if(job_desc_text.value.trim()===""){
-            jb_description_selected=false;
             alert("empty textarea")
             return;
         }
@@ -281,7 +279,7 @@ function get_job_description()
         job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
     }
 }
-//this function is to delete the resume uploaded and displayed on the screen but not added
+//this function is to delete the file uploaded and displayed on the screen but not added
 function delete_instance_file(div_){
     var pElement=div_.nextElementSibling;
     var instance_file=document.getElementById('instance-upload-file')
@@ -302,22 +300,11 @@ function display_jb_description_file(display_folder){
     var input_=document.getElementById('job-description-file');
     var button_=document.getElementById('jb-copy-paste-button');
     if(display_folder){
-        div_.style.display='flex';
         label_.style.display='none';
         button_.style.display='none';
         inputFile=input_.files[0];
-        div_.innerHTML="<div class='instance-jb-cross-buttons' onclick='display_jb_description_file(false)'>x</div>"+inputFile.name;
+        console.log(inputFile)
+        
     }
-    else{
-        div_.style.display='none';
-        label_.style.display='block';
-        button_.style.display='block';
-        const files=Array.from(input_.files)
-        const namesToRemove=input_.files[0].name
-        const filteredFiles=files.filter(file=>!namesToRemove.includes(file.name));
-        const dataTransfer=new DataTransfer();
-        filteredFiles.forEach(file=>dataTransfer.items.add(file))
-        input_.files=dataTransfer.files;
-        jb_description_selected=false;
-    }
+
 }
