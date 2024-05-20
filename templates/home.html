@@ -15,9 +15,10 @@
             <div id="jb">
                 <h2>Job Description</h2>
                 <div class="file-upload">
+                    <div id="instance-job-description"></div>
                     <label for="job-description-file" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
-                    <input type="file" id="job-description-file" accept=".pdf,.docx">
-                    <button onClick="disable_file(this)"> copy paste</button>
+                    <input type="file" id="job-description-file" onchange="display_jb_description_file(true)" accept=".pdf,.docx">
+                    <button onClick="disable_file(this)" id='jb-copy-paste-button'> copy paste</button>
                 </div>
                 <div class="file-upload-text">
                     <textarea id="job-description-text" placeholder="Type or paste resumes here"></textarea>
