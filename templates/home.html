@@ -17,7 +17,6 @@
         width:100%;
 
     }
-
     #jb,#resume{
         display:flex;
         width:100%;
@@ -120,8 +119,27 @@
     }
     .pdf-img p{
         width:70px;
-        height:90px;
+        height:80px;
         overflow:hidden;
+        padding:0px;
+        margin:0px;
+    }
+    #instance-file-cross-button{
+        position:relative;
+        left:60px;
+        height:10px;
+        width:10px;
+        background-color:white;
+        border-radius:100px;
+        content:'x';
+        cursor:pointer;
+        border:2px solid black;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-family:Arial, sans-serif;
+        line-height:1;
+        font-size:10px;
     }
 </style>
 </head>
@@ -382,15 +400,20 @@
         label.style.display="none";
         copy_paste.style.display="none";
         const instance_list=document.getElementById('instance-upload-file')
+        instance_list.innerHTML=""
         if(files.length>4){
             for( let i=0;i<5;i++){
-                instance_list.innerHTML+="<div class='pdf-img'><p>"+files[i].name+"</p></div>"
+                instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
             }
             instance_list.innerHTML+="<div class='pdf-img'><p> . . . </p></div>"
         }
         else{
             for( let i=0;i<files.length;i++){
-                instance_list.innerHTML+="<div class='pdf-img'><p>"+files[i].name+"</p></div>"
+                instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+            }
+            if(files.length===0){
+                label.style.display="block";
+                copy_paste.style.display="block";
             }
         }
     }
@@ -435,7 +458,19 @@
             job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
         }
     }
-
+    function delete_instance_file(div_){
+        var pElement=div_.nextElementSibling;
+        var instance_file=document.getElementById('instance-upload-file')
+        var fileInput=document.getElementById('resume-content-file')
+        const files = Array.from(fileInput.files);
+        const namesToRemove = [pElement.textContent];
+        const filteredFiles = files.filter(file => !namesToRemove.includes(file.name));
+        const dataTransfer = new DataTransfer();
+        filteredFiles.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+        console.log(fileInput.files)
+        showSelectedResumeName(fileInput)
+    }
 
 </script>
 
