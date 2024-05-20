@@ -8,6 +8,11 @@
 <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
+    <div id="blur-box"></div>
+    <div id="alert-box">
+        <div id="alert-cross-button" class="cross-buttons"onclick="remove_alert_box()">x</div>
+        <p>information</p>
+    </div>
 <div class="container">
     <button class="button" id='continue-button' onclick="go_to_resume()">continue</button>
     <button class="button" id='previous-button' onclick="go_to_jb()">previous</button>
@@ -41,9 +46,6 @@
                 <button class="button" onclick="uploadResume()">Add</button>
                 <button class="button" id="submit-button">Submit</button>
                 <table id="resume-list-div">
-                    <th>
-                        <tr>file name</tr>
-                    </th>
                     <tr>
                         <td>No File Selected</td>
                     </tr>
