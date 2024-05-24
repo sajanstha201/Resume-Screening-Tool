@@ -19,27 +19,31 @@ request.onupgradeneeded = (event) => {
     const db = event.target.result;
     const objectStore = db.createObjectStore("resumes", { autoIncrement: true, keyPath: "id" });
 };
-// this is for disabling the upload mode and enablign the textarea
-function disable_file(button){
-    resume_file_activate=false;
+function disable_job_file(){
     jb_file_activate=false;
-    var file_=button.previousElementSibling;
-    file_.value=''
-    var div_=button.parentElement;
-    div_.style.display='none';
-    var div_next_sibling=div_.nextElementSibling;
-    div_next_sibling.style.display='flex'
+    document.getElementById('job-description-file').value=''
+    document.getElementById('job-file-upload').style.display='none';
+    document.getElementById('job-file-upload-text').style.display='flex';
+}
+// this is for disabling the upload mode and enablign the textarea
+function disable_resume_file(){
+    resume_file_activate=false;
+    document.getElementById('resume-content-file').value=''
+    document.getElementById('resume-file-upload').style.display='none';
+    document.getElementById('resume-file-upload-text').style.display='flex';
+}
+function disable_job_text(){
+    jb_file_activate=true;
+    document.getElementById('job-description-text').value='';
+    document.getElementById('job-file-upload-text').style.display='none';
+    document.getElementById('job-file-upload').style.display='flex'
 }
 // this is for disabling the textarea and enabling the upload mode
-function disable_text(button){
+function disable_resume_text(){
     resume_file_activate=true;
-    jb_file_activate=true;
-    var textarea_=button.previousElementSibling;
-    textarea_.value=''
-    var div_=button.parentElement;
-    div_.style.display='none';
-    var div_next_sibling=div_.previousElementSibling;
-    div_next_sibling.style.display='flex'
+    document.getElementById('resume-content-text').value='';
+    document.getElementById('resume-file-upload-text').style.display='none';
+    document.getElementById('resume-file-upload').style.display='flex'
 }
 //this is for going to the resume upload area
 function go_to_resume(){
@@ -50,34 +54,29 @@ function go_to_resume(){
     if(jb_file_activate){
         display_jb_description_file(true);
     }
-    resume_file_activate=true;
-    var jb=document.getElementById('jb')
-    var resume=document.getElementById('resume')
-    var continue_button=document.getElementById('continue-button')
-    var previous_button=document.getElementById('previous-button')
-    jb.style.display='none'
-    resume.style.display='flex'
-    continue_button.style.display='none'
-    previous_button.style.display='block'
+    document.getElementById('jb').style.display='none'
+    document.getElementById('resume').style.display='flex'
+    document.getElementById('continue-button').style.display='none'
+    document.getElementById('previous-button').style.display='block'
+    document.getElementById('result').style.display='flex'
 }
 //this is for going to job description area
 function go_to_jb(){
-    var jb=document.getElementById('jb')
-    var resume=document.getElementById('resume')
-    var continue_button=document.getElementById('continue-button')
-    var previous_button=document.getElementById('previous-button')
-    jb.style.display='flex'
-    resume.style.display='none'
-    continue_button.style.display='block'
-    previous_button.style.display='none'
+    document.getElementById('jb').style.display='flex'
+    document.getElementById('resume').style.display='none'
+    document.getElementById('continue-button').style.display='block'
+    document.getElementById('previous-button').style.display='none'
+    document.getElementById('result').style.display='none'
 }
 // this is for uploading the selected file in the table
 function uploadResume() {
+    document.getElementById('instance-upload-file').style.display='none';
     const fileInput=document.getElementById('resume-content-file')
     const textInput=document.getElementById('resume-content-text')
     const selectedFiles = fileInput.files;
     const dbName = "resume_list";
     const request = indexedDB.open(dbName);
+    console.log(resume_file_activate)
     if(!resume_file_activate){
         if(textInput.value.trim()===""){
             alert_message("Empty Textarea");
@@ -217,17 +216,18 @@ function showSelectedResumeName(input_)
     const copy_paste=document.getElementById('resume-copy-paste-button')
     label.style.display="none";
     copy_paste.style.display="none";
-    const instance_list=document.getElementById('instance-upload-file')
+    var instance_list=document.getElementById('instance-upload-file')
+    instance_list.style.display="flex";
     instance_list.innerHTML=""
-    if(files.length>4){
-        for( let i=0;i<5;i++){
-            instance_list.innerHTML+="<div class='pdf-img'><div class='cross-buttons' id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+    if(files.length>3){
+        for( let i=0;i<4;i++){
+            instance_list.innerHTML+="<div class='pdf-img'><div class='cross-buttons' id='instance-file-cross-button' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
         }
         instance_list.innerHTML+="<div class='pdf-img'><p> . . . </p></div>"
     }
     else{
         for( let i=0;i<files.length;i++){
-            instance_list.innerHTML+="<div class='pdf-img'><div class='cross-buttons' id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+            instance_list.innerHTML+="<div class='pdf-img'><div class='cross-buttons' id='instance-file-cross-button' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
         }
         if(files.length===0){
             label.style.display="block";
@@ -301,12 +301,14 @@ function display_jb_description_file(display_folder){
     var label_=document.getElementById('job-description-label');
     var input_=document.getElementById('job-description-file');
     var button_=document.getElementById('jb-copy-paste-button');
+    var file_upload=document.getElementById('job-file-upload')
     if(display_folder){
         div_.style.display='flex';
         label_.style.display='none';
         button_.style.display='none';
         inputFile=input_.files[0];
         div_.innerHTML="<div class='cross-buttons' id='instance-jb-cross-button' onclick='display_jb_description_file(false)'>x</div>"+inputFile.name;
+        //file_upload.style.border='none';
     }
     else{
         div_.style.display='none';
@@ -319,6 +321,7 @@ function display_jb_description_file(display_folder){
         filteredFiles.forEach(file=>dataTransfer.items.add(file))
         input_.files=dataTransfer.files;
         jb_description_selected=false;
+        //file_upload.style.border='2px dashed #ccc';
     }
 }
 //this will remove the alert box when cross button is clicked

@@ -80,7 +80,7 @@ function uploadResume() {
     const request = indexedDB.open(dbName);
     if(!resume_file_activate){
         if(textInput.value.trim()===""){
-            alert("Empty textarea");
+            alert_message("Empty Textarea");
             return;
         }
         request.onsuccess=(event)=>{
@@ -100,7 +100,7 @@ function uploadResume() {
     }
     else{
         if(selectedFiles.length===0){
-            alert("No file selected");
+            alert_message("No File Selected")
             return;
         }
         const dbName = "resume_list";
@@ -221,13 +221,13 @@ function showSelectedResumeName(input_)
     instance_list.innerHTML=""
     if(files.length>4){
         for( let i=0;i<5;i++){
-            instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+            instance_list.innerHTML+="<div class='pdf-img'><div class='cross-buttons' id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
         }
         instance_list.innerHTML+="<div class='pdf-img'><p> . . . </p></div>"
     }
     else{
         for( let i=0;i<files.length;i++){
-            instance_list.innerHTML+="<div class='pdf-img'><div id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
+            instance_list.innerHTML+="<div class='pdf-img'><div class='cross-buttons' id='instance-file-cross-button' class='instance-file-cross-buttons' onclick='delete_instance_file(this)'>x</div><p>"+files[i].name+"</p></div>"
         }
         if(files.length===0){
             label.style.display="block";
@@ -257,7 +257,7 @@ function get_job_description()
     {
         if(job_description_files.length===0){
             jb_description_selected=false;
-            alert("no file selected");
+            alert_message("No file selected")
             return;
         }
         jb_description_selected=true;
@@ -274,7 +274,7 @@ function get_job_description()
     else{
         if(job_desc_text.value.trim()===""){
             jb_description_selected=false;
-            alert("empty textarea")
+            alert_message("Empty Textarea")
             return;
         }
         jb_description_selected=true;
@@ -301,12 +301,14 @@ function display_jb_description_file(display_folder){
     var label_=document.getElementById('job-description-label');
     var input_=document.getElementById('job-description-file');
     var button_=document.getElementById('jb-copy-paste-button');
+    var file_upload=document.getElementById('file-upload')
     if(display_folder){
         div_.style.display='flex';
         label_.style.display='none';
         button_.style.display='none';
         inputFile=input_.files[0];
         div_.innerHTML="<div class='cross-buttons' id='instance-jb-cross-button' onclick='display_jb_description_file(false)'>x</div>"+inputFile.name;
+        file_upload.style.background='red';
     }
     else{
         div_.style.display='none';
@@ -321,9 +323,22 @@ function display_jb_description_file(display_folder){
         jb_description_selected=false;
     }
 }
+//this will remove the alert box when cross button is clicked
 function remove_alert_box(){
     blur_div=document.getElementById('blur-box');
     alert_div=document.getElementById('alert-box');
     blur_div.style.display='none';
     alert_div.style.display='none';
+    alert_div.style.opacity=0;
+}
+//this is popout the alert message when some alert need to popout in window
+function alert_message(message){
+    var alert_div=document.getElementById('alert-box')
+    var blur_div=document.getElementById('blur-box');
+    alert_div.classList.toggle('alert-class')
+    alert_div.style.opacity=1;
+    blur_div.style.display='flex';
+    alert_div.style.display='flex';
+    var pElement=alert_div.querySelector('p');
+    pElement.textContent=message;
 }
