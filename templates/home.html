@@ -1,426 +1,66 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Job Application Form</title>
-<style>
-    .container{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        margin:10px;
-        width:100%;
-    }
-    .uploading{
-        display:flex;
-        width:100%;
-
-    }
-
-    #jb,#resume{
-        display:flex;
-        width:100%;
-        flex-direction:column;
-        align-items:center;
-    }
-    #resume{
-       display:none;
-    }
-    .file-upload,.file-upload-text {
-        display:flex;
-        width:75%;
-        border: 2px dashed #ccc;
-        border-radius:10px;
-        border-color:blue;
-        padding: 20px;
-        align-items:center;
-        justify-content:center;
-        height:200px;
-        margin:50px;
-        flex-direction:column;
-    }
-    .file-upload-text{
-        display:none;
-    }
-    .file-upload-text textarea{
-        width:100%;
-        height:100%;
-        border-color:white;
-    }
-    .file-upload-text textarea:focus{
-        outline:none;
-    }
-    .file-upload button,.file-upload-text button{
-        border:none;
-        background-color:white;
-        color:blue;
-        cursor:pointer;
-    }
-    .file-upload input[type="file"] {
-        display: none;
-    }
-    .file-upload label {
-        display: block;
-        cursor: pointer;
-    }
-    #job-description-label,#resume-content-label{
-        color:blue;
-        border:2px solid blue;
-        border-radius:5px;
-        padding:20px;
-        text-align:center;
-        margin:30px;
-    }
-    .button{
-        height:30px;
-        width:100px;
-    }
-    #previous-button{
-        display:none;
-    }
-    #submit-button{
-        margin:10px;
-    }
-    table {
-        width: 40%;
-        border-collapse: collapse;
-        font-family: Arial, sans-serif;
-        border: 1px solid #dddddd; 
-    }
-
-    th {
-        background-color: #f2f2f2;
-        text-align: left;
-        padding: 8px;
-        border: 1px solid #dddddd; 
-    }
-    td {
-        padding: 8px;
-        border: 1px solid #dddddd; 
-    }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    tr:hover {
-        background-color: #f5f5f5;
-    }
-    #instance-upload-file{
-        max-width:100%;
-        max-height:100%;
-        display:flex;
-        flex-direction:row;
-    }
-    .pdf-img{
-        background-color:lightblue;
-        border:2px solid blue;
-        border-radius:5px;
-        margin:10px;
-        padding:10px;
-    }
-    .pdf-img p{
-        width:70px;
-        height:90px;
-        overflow:hidden;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 <body>
+    <div id="blur-box"></div>
+    <div id="alert-box">
+        <div id="alert-cross-button" class="cross-buttons"onclick="remove_alert_box()">x</div>
+        <p>information</p>
+    </div>
 <div class="container">
     <button class="button" id='continue-button' onclick="go_to_resume()">continue</button>
     <button class="button" id='previous-button' onclick="go_to_jb()">previous</button>
-        <div class="uploading">
+    <div id='resume-nav'>
+        <div class='circle-button' id='job-button' onclick='go_to_jb()'>1
+        </div>
+        <div id='job-resume-line'>
+        </div>
+        <div class='circle-button' id='resume-button' onclick='go_to_resume()'>2
+        </div>
+    </div>
+        <div id="uploading">
             <div id="jb">
                 <h2>Job Description</h2>
-                <div class="file-upload">
-                    <label for="job-description-file" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
-                    <input type="file" id="job-description-file" accept=".pdf,.docx">
-                    <button onClick="disable_file(this)"> copy paste</button>
+                <div class="file-upload" id='job-file-upload'>
+                    <div id="instance-job-description"></div>
+                    <label for="job-description-file" id="job-description-label"><p>Upload or Drop Job Description</p> <p> as .pdf or .docx file </p></label>
+                    <input type="file" id="job-description-file" onchange="display_jb_description_file(true)" accept=".pdf,.docx">
+                    <button onClick="disable_job_file()" id='jb-copy-paste-button'> copy paste</button>
                 </div>
-                <div class="file-upload-text">
+                <div class="file-upload" id='job-file-upload-text'>
                     <textarea id="job-description-text" placeholder="Type or paste resumes here"></textarea>
-                    <button onClick="disable_text(this)">upload or drop</button>
+                    <button onClick="disable_job_text()" id='job-copy-paste-button'>upload or drop</button>
                 </div>
             </div>
             <div id="resume">
                 <h2>Resume Upload</h2>
-                <div class="file-upload">
+                <div class="file-upload" id='resume-file-upload'>
                     <div id="instance-upload-file"></div>
                     <label for="resume-content-file" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
                     <input onchange="showSelectedResumeName(this)"type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
-                    <button onClick="disable_file(this)" id='resume-copy-paste-button'> copy paste</button>
+                    <button onClick="disable_resume_file()" id='resume-copy-paste-button'> copy paste</button>
 
                 </div>
-                <div class="file-upload-text">
+                <div class="file-upload" id='resume-file-upload-text'>
                     <textarea id="resume-content-text" placeholder="Type or paste resumes here"></textarea>
-                    <button onClick="disable_text(this)">upload or drop</button>
+                    <button onClick="disable_resume_text()">upload or drop</button>
                 </div>
-                <button class="button" onclick="uploadResume()">Add</button>
-                <button class="button" id="submit-button">Submit</button>
-                <table id="resume-list-div">
-                    <th>
-                        <tr>file name</tr>
-                    </th>
-                    <tr>
-                        <td>No File Selected</td>
-                    </tr>
-                </table>
+            </div>
+        </div>
+        <div id='result'>
+            <button class="button" onclick="uploadResume()">Add</button>
+            <button class="button" id="submit-button">Submit</button>
+            <div id='resume-list-div'>
+
             </div>
         </div>
 </div>
-
-<script>
-    let resume_file_activate=true;
-    let job_description_details={name:'',content:''}
-    const dbName = "resume_list";
-    const dbVersion = 2;
-    const deleteRequest=indexedDB.deleteDatabase(dbName);
-    deleteRequest.onsucess=(event)=>{
-        console.log('Indexed Cleared');
-      }
-    deleteRequest.onerror=(event)=>{
-        console.log('error:',event.target.error);
-      }
-    const request = indexedDB.open(dbName, dbVersion);
-    request.onerror = (event) => {
-      console.error("Error opening IndexedDB:", event.target.error);
-    }
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      const objectStore = db.createObjectStore("resumes", { autoIncrement: true, keyPath: "id" });
-    };
-    function disable_file(button){
-        resume_file_activate=false;
-        var file_=button.previousElementSibling;
-        file_.value=''
-        var div_=button.parentElement;
-        div_.style.display='none';
-        var div_next_sibling=div_.nextElementSibling;
-        div_next_sibling.style.display='flex'
-    }
-    function disable_text(button){
-        var textarea_=button.previousElementSibling;
-        textarea_.value=''
-        var div_=button.parentElement;
-        div_.style.display='none';
-        var div_next_sibling=div_.previousElementSibling;
-        div_next_sibling.style.display='flex'
-    }
-    function go_to_resume(){
-        resume_file_activate=true;
-        get_job_description()
-        var jb=document.getElementById('jb')
-        var resume=document.getElementById('resume')
-        var continue_button=document.getElementById('continue-button')
-        var previous_button=document.getElementById('previous-button')
-        jb.style.display='none'
-        resume.style.display='flex'
-        continue_button.style.display='none'
-        previous_button.style.display='block'
-    }
-    function go_to_jb(){
-        var jb=document.getElementById('jb')
-        var resume=document.getElementById('resume')
-        var continue_button=document.getElementById('continue-button')
-        var previous_button=document.getElementById('previous-button')
-        jb.style.display='flex'
-        resume.style.display='none'
-        continue_button.style.display='block'
-        previous_button.style.display='none'
-    }
-    function uploadResume() {
-        const fileInput=document.getElementById('resume-content-file')
-        const textInput=document.getElementById('resume-content-text')
-        const selectedFiles = fileInput.files;
-        console.log(selectedFiles)
-        const dbName = "resume_list";
-        const request = indexedDB.open(dbName);
-        if(!resume_file_activate){
-            if(textInput.value.trim()===""){
-                alert("Empty textarea");
-                return;
-            }
-          request.onsuccess=(event)=>{
-            const db=event.target.result;
-            const transaction=db.transaction(["resumes"],"readwrite");
-            const objectStore=transaction.objectStore("resumes")
-            objectStore.add({name:textInput.value.slice(0,20),content:textInput.value})
-            transaction.oncomplete=(event)=>{
-                console.log("Text resume added to the database");
-                showUploadedResume()
-                textInput.value=''
-            }
-          }
-          request.onerror=(event)=>{
-            console.error(event.target.error)
-          }
-        }
-        else{
-            if(selectedFiles.length===0){
-                alert("No file selected");
-                return;
-            }
-          const dbName = "resume_list";
-          const request = indexedDB.open(dbName);
-          request.onsuccess = async (event) => {
-            const db = event.target.result;
-            const fileReadPromises=[]
-            for (let i = 0; i < selectedFiles.length; i++) {
-              const file=selectedFiles[i]
-              var v=0;
-              const fileReadPromise=await new Promise((resolve,reject)=>{
-                  v=i;
-                  const reader= new FileReader()
-                  reader.onload=(event)=>{
-                    resolve({name: file.name,content:event.target.result})
-                  }
-                  reader.onerror=(event)=>{
-                    reject(event.target.error)
-                  }
-                  reader.readAsText(file)
-                })
-              fileReadPromises.push(fileReadPromise)
-            }
-            try{
-              const fileContents=await Promise.all(fileReadPromises)
-              const transaction = db.transaction(["resumes"], "readwrite");
-              const objectStore = transaction.objectStore("resumes");
-              fileContents.forEach(fileData=>{
-                objectStore.add(fileData)
-              })
-              transaction.oncomplete = () => {
-                console.log("Files stored in IndexedDB successfully!");
-                showUploadedResume();
-                fileInput.value=''
-                resume_upload_normal_form();
-              }
-            }
-            catch(error){
-              console.log(error);
-            } 
-            }
-            request.onerror=(event)=>{
-                console.error(event.target.error);
-            }
-        }
-      }
-      function showUploadedResume() {
-        const dbName = "resume_list";
-        const request = indexedDB.open(dbName);
-        request.onsuccess = (event) => {
-            const db = event.target.result;
-            const transaction = db.transaction(["resumes"], "readonly"); 
-            const objectStore = transaction.objectStore("resumes");
-            const request = objectStore.getAll();
-          request.onsuccess = (event) => {
-              const allItems = event.target.result;
-              const list=document.getElementById('resume-list-div');
-              list.innerHTML='<tr><th>Selected Files</th><th>action</th></tr>';
-              for(let i=0;i<allItems.length;i++)
-              {   
-                  id="btn_"+i
-                  const Text = '<tr><td>' + allItems[i].name + '</td><td><button type="button" id="'+id+'"onclick="remove_pdf(this)"> remove</button></td></tr>';
-                  list.innerHTML=list.innerHTML+Text;
-              }
-          }
-          request.onerror = (event) => {
-            console.error('Error retrieving items:', event.target.error);
-          }
-        }
-    }
-    function remove_pdf(event)
-    {
-        let primary_key
-        const row=event.closest('tr')
-        const cells = row.getElementsByTagName('td');
-        const pdf_name=cells[0].textContent
-        const dbName = "resume_list";
-        const request = indexedDB.open(dbName);
-        request.onsuccess = (event) => {
-            const db = event.target.result;
-            const transaction = db.transaction(["resumes"], "readwrite"); 
-            const objectStore = transaction.objectStore("resumes");
-            objectStore.openCursor().onsuccess=(event)=>{
-                const cursor=event.target.result
-                if(cursor)
-                {
-                    if(cursor.value.name===pdf_name)
-                    {
-                        const cursor_request=cursor.delete();
-                        cursor_request.onsuccess=()=>{
-                            showUploadedResume();
-                        }
-
-                    }
-                    else{
-                        cursor.continue();
-                    }
-                }
-            }
-            transaction.oncomplete=()=>{
-                console.log("delete transaction complete")
-            }    
-        }
-        
-        
-    }
-    function showSelectedResumeName(input_)
-    {
-        const label=document.getElementById('resume-content-label')
-        const div_=document.getElementById('file-upload')
-        const files=input_.files;
-        const copy_paste=document.getElementById('resume-copy-paste-button')
-        label.style.display="none";
-        copy_paste.style.display="none";
-        const instance_list=document.getElementById('instance-upload-file')
-        if(files.length>4){
-            for( let i=0;i<5;i++){
-                instance_list.innerHTML+="<div class='pdf-img'><p>"+files[i].name+"</p></div>"
-            }
-            instance_list.innerHTML+="<div class='pdf-img'><p> . . . </p></div>"
-        }
-        else{
-            for( let i=0;i<files.length;i++){
-                instance_list.innerHTML+="<div class='pdf-img'><p>"+files[i].name+"</p></div>"
-            }
-        }
-    }
-    function resume_upload_normal_form(){
-        const label=document.getElementById('resume-content-label')
-        const files=document.getElementById('resume-content-file')
-        const copy_paste=document.getElementById('resume-copy-paste-button')
-        const instance_list=document.getElementById('instance-upload-file')
-        files.value=''
-        label.style.display="block"
-        copy_paste.style.display="block";
-        instance_list.innerHTML=""
-    }
-    function get_job_description()
-    {
-        const job_desc_pdf=document.getElementById('job-description-file')
-        const job_desc_text=document.getElementById('job-description-text')
-        const job_descripton_file=job_desc_pdf.files[0]
-        if(job_descripton_file.name!='')
-        {
-            const file_job_description=job_desc_pdf.files[0]
-            const reader = new FileReader()
-            reader.onload=(e)=>{
-                const file_content=e.target.result
-                job_description_details={name:job_descripton_file.name,content:file_content}
-            }
-            
-        }
-        else if(job_desc_text.value.trim()!=0)
-        {
-            job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
-        }
-        
-        console.log(job_description_details)
-
-    }
-
-
-</script>
-
+<script src="{% static 'script.js' %}"></script>
 </body>
 </html>
