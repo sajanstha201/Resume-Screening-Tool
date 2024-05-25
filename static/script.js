@@ -193,7 +193,7 @@ function remove_pdf(event)
                     cursor_request.onsuccess=()=>{
                         showUploadedResume();
                     }
-
+//hi
                 }
                 else{
                     cursor.continue();
