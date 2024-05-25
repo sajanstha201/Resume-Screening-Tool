@@ -24,30 +24,30 @@
         <div class='circle-button' id='resume-button' onclick='go_to_resume()'>2
         </div>
     </div>
-        <div class="uploading">
+        <div id="uploading">
             <div id="jb">
                 <h2>Job Description</h2>
-                <div class="job-file-upload" id='job-file-upload'>
+                <div class="file-upload" id='job-file-upload'>
                     <div id="instance-job-description"></div>
-                    <label for="job-description-file" id="job-description-label">Upload or Drop Job Description <p> as .pdf or .docx file </p></label>
+                    <label for="job-description-file" id="job-description-label"><p>Upload or Drop Job Description</p> <p> as .pdf or .docx file </p></label>
                     <input type="file" id="job-description-file" onchange="display_jb_description_file(true)" accept=".pdf,.docx">
                     <button onClick="disable_job_file()" id='jb-copy-paste-button'> copy paste</button>
                 </div>
-                <div class="job-file-upload-text" id='job-file-upload-text'>
+                <div class="file-upload" id='job-file-upload-text'>
                     <textarea id="job-description-text" placeholder="Type or paste resumes here"></textarea>
                     <button onClick="disable_job_text()" id='job-copy-paste-button'>upload or drop</button>
                 </div>
             </div>
             <div id="resume">
                 <h2>Resume Upload</h2>
-                <div class="resume-file-upload" id='resume-file-upload'>
+                <div class="file-upload" id='resume-file-upload'>
                     <div id="instance-upload-file"></div>
                     <label for="resume-content-file" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
                     <input onchange="showSelectedResumeName(this)"type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
                     <button onClick="disable_resume_file()" id='resume-copy-paste-button'> copy paste</button>
 
                 </div>
-                <div class="resume-file-upload-text" id='resume-file-upload-text'>
+                <div class="file-upload" id='resume-file-upload-text'>
                     <textarea id="resume-content-text" placeholder="Type or paste resumes here"></textarea>
                     <button onClick="disable_resume_text()">upload or drop</button>
                 </div>
@@ -56,11 +56,9 @@
         <div id='result'>
             <button class="button" onclick="uploadResume()">Add</button>
             <button class="button" id="submit-button">Submit</button>
-            <table id="resume-list-div">
-                <tr>
-                    <td>No File Selected</td>
-                </tr>
-            </table>
+            <div id='resume-list-div'>
+
+            </div>
         </div>
 </div>
 <script src="{% static 'script.js' %}"></script>

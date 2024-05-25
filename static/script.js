@@ -76,7 +76,6 @@ function uploadResume() {
     const selectedFiles = fileInput.files;
     const dbName = "resume_list";
     const request = indexedDB.open(dbName);
-    console.log(resume_file_activate)
     if(!resume_file_activate){
         if(textInput.value.trim()===""){
             alert_message("Empty Textarea");
@@ -102,6 +101,7 @@ function uploadResume() {
             alert_message("No File Selected")
             return;
         }
+        resume_upload_normal_form();
         const dbName = "resume_list";
         const request = indexedDB.open(dbName);
         request.onsuccess = async (event) => {
@@ -132,9 +132,9 @@ function uploadResume() {
             })
             transaction.oncomplete = () => {
             console.log("Files stored in IndexedDB successfully!");
+            document.getElementById('resume-content-file').value='';
+            fileInput.value='';
             showUploadedResume();
-            fileInput.value=''
-            resume_upload_normal_form();
             }
         }
         catch(error){
@@ -158,11 +158,11 @@ request.onsuccess = (event) => {
     request.onsuccess = (event) => {
         const allItems = event.target.result;
         const list=document.getElementById('resume-list-div');
-        list.innerHTML='<tr><th>Selected Files</th><th>action</th></tr>';
         for(let i=0;i<allItems.length;i++)
         {   
             id="btn_"+i
-            const Text = '<tr><td>' + allItems[i].name + '</td><td><button type="button" id="'+id+'"onclick="remove_pdf(this)"> remove</button></td></tr>';
+            const Text='<div id="resume-pdf"><p>'+allItems[i].name+'</p></div><div class="resume-cross-buttons" id="'+id+'" onclick="remove_pdf(this)">x</div>'
+            //const Text = '<tr><td>' + allItems[i].name + '</td><td><button type="button" id="'+id+'"onclick="remove_pdf(this)"> remove</button></td></tr>';
             list.innerHTML=list.innerHTML+Text;
         }
     }
@@ -238,11 +238,9 @@ function showSelectedResumeName(input_)
 //this is to convert the resume upload form to normal mode after addding the files that
 // is added by the used in the table
 function resume_upload_normal_form(){
-    const label=document.getElementById('resume-content-label')
-    const files=document.getElementById('resume-content-file')
+    const label=document.getElementById('resume-content-label');
     const copy_paste=document.getElementById('resume-copy-paste-button')
     const instance_list=document.getElementById('instance-upload-file')
-    files.value=''
     label.style.display="block"
     copy_paste.style.display="block";
     instance_list.innerHTML=""
