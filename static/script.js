@@ -158,9 +158,10 @@ request.onsuccess = (event) => {
     request.onsuccess = (event) => {
         const allItems = event.target.result;
         const list=document.getElementById('resume-list-div');
+        list.innerHTML=''
         for(let i=0;i<allItems.length;i++)
         {   
-            id="btn_"+i
+            id=allItems[i].name
             const Text='<div id="resume-pdf"><p>'+allItems[i].name+'</p></div><div class="resume-cross-buttons" id="'+id+'" onclick="remove_pdf(this)">x</div>'
             //const Text = '<tr><td>' + allItems[i].name + '</td><td><button type="button" id="'+id+'"onclick="remove_pdf(this)"> remove</button></td></tr>';
             list.innerHTML=list.innerHTML+Text;
@@ -173,12 +174,11 @@ request.onsuccess = (event) => {
 }
 function remove_pdf(event)
 {
-    let primary_key
-    const row=event.closest('tr')
-    const cells = row.getElementsByTagName('td');
-    const pdf_name=cells[0].textContent
+    const main_div = event.closest('div').id
+    const pdf_name=main_div;
     const dbName = "resume_list";
     const request = indexedDB.open(dbName);
+    console.log(pdf_name)
     request.onsuccess = (event) => {
         const db = event.target.result;
         const transaction = db.transaction(["resumes"], "readwrite"); 
@@ -193,7 +193,7 @@ function remove_pdf(event)
                     cursor_request.onsuccess=()=>{
                         showUploadedResume();
                     }
-
+//hi
                 }
                 else{
                     cursor.continue();
