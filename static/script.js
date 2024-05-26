@@ -63,7 +63,7 @@ function go_to_jb(){
     document.getElementById('jb').style.display='flex'
     document.getElementById('resume').style.display='none'
     document.getElementById('continue-button').style.display='block'
-   // document.getElementById('previous-button').style.display='none'
+   // document.getElementById('previous-button').style.display='none';
     document.getElementById('result').style.display='none'
 }
 // this is for uploading the selected file in the table
