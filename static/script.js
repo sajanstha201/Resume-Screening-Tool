@@ -51,13 +51,11 @@ function go_to_resume(){
     if(!jb_description_selected){
         return;
     }
-    if(jb_file_activate){
-        display_jb_description_file(true);
-    }
+    console.log("klafjalsdjfsdl")
     document.getElementById('jb').style.display='none'
     document.getElementById('resume').style.display='flex'
     document.getElementById('continue-button').style.display='none'
-    document.getElementById('previous-button').style.display='block'
+    //document.getElementById('previous-button').style.display='block'
     document.getElementById('result').style.display='flex'
 }
 //this is for going to job description area
@@ -65,7 +63,7 @@ function go_to_jb(){
     document.getElementById('jb').style.display='flex'
     document.getElementById('resume').style.display='none'
     document.getElementById('continue-button').style.display='block'
-    document.getElementById('previous-button').style.display='none'
+   // document.getElementById('previous-button').style.display='none'
     document.getElementById('result').style.display='none'
 }
 // this is for uploading the selected file in the table
@@ -307,6 +305,8 @@ function display_jb_description_file(display_folder){
         inputFile=input_.files[0];
         div_.innerHTML="<div class='cross-buttons' id='instance-jb-cross-button' onclick='display_jb_description_file(false)'>x</div>"+inputFile.name;
         //file_upload.style.border='none';
+        console.log("lksdfjlfjlsjflsdkfl")
+        go_to_resume();
     }
     else{
         div_.style.display='none';
