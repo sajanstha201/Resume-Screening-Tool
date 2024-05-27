@@ -21,7 +21,7 @@ html,body{
     height: 50px;
     background-color: lightblue;
     color: white;
-    margin: auto;
+    margin: 0px;
     border-radius: 50px;
     border: 2px dashed black;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
