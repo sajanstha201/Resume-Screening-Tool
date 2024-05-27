@@ -58,6 +58,9 @@ function go_to_resume(){
     document.getElementById('continue-button').style.display='none'
     //document.getElementById('previous-button').style.display='block'
     document.getElementById('result').style.display='flex'
+    document.getElementById('job-button').style.border='2px solid black'
+    document.getElementById('job-resume-line').style.borderTop='2px solid black';
+
 }
 //this is for going to job description area
 function go_to_jb(){
