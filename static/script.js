@@ -2,6 +2,7 @@ let resume_file_activate=true;
 let jb_file_activate=true;
 let jb_description_selected=false;
 let job_description_details={name:'',content:''}
+let final_resume_list=[]
 const dbName = "resume_list";
 const dbVersion = 2;
 const deleteRequest=indexedDB.deleteDatabase(dbName);
@@ -168,6 +169,7 @@ request.onsuccess = (event) => {
     request.onerror = (event) => {
     console.error('Error retrieving items:', event.target.error);
     }
+    get_resume_details_from_indexdb();
 }
 }
 function remove_pdf(event)
@@ -340,4 +342,27 @@ function alert_message(message){
     alert_div.style.display='flex';
     var pElement=alert_div.querySelector('p');
     pElement.textContent=message;
+}
+
+
+function get_resume_details_from_indexdb()
+{
+    const dbName = "resume_list";
+    const request = indexedDB.open(dbName);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction(["resumes"], "readonly"); 
+        const objectStore = transaction.objectStore("resumes");
+        const request = objectStore.getAll();
+        request.onsuccess = (event) => {
+            const allItems = event.target.result;
+            for (let i=0;i<allItems.length;i++)
+                {
+                    final_resume_list.push({sn:i,name:allItems[i].name,content:allItems[i].content})
+                }
+            console.log(final_resume_list)
+        }}
+        request.onerror = (event) => {
+            console.error('Error retrieving items:', event.target.error);
+            }
 }
