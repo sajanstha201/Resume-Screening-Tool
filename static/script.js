@@ -169,7 +169,6 @@ request.onsuccess = (event) => {
     request.onerror = (event) => {
     console.error('Error retrieving items:', event.target.error);
     }
-    get_resume_details_from_indexdb();
 }
 }
 function remove_pdf(event)
@@ -345,6 +344,7 @@ function alert_message(message){
 }
 
 
+//this function when called retrives all the resume data stored in indexdb and stores it in the list of objects\dictionary  
 function get_resume_details_from_indexdb()
 {
     const dbName = "resume_list";
@@ -360,9 +360,9 @@ function get_resume_details_from_indexdb()
                 {
                     final_resume_list.push({sn:i,name:allItems[i].name,content:allItems[i].content})
                 }
-            console.log(final_resume_list)
         }}
         request.onerror = (event) => {
             console.error('Error retrieving items:', event.target.error);
             }
 }
+
