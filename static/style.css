@@ -11,7 +11,6 @@ html,body{
 }
 #resume-nav{
     width:40%;
-    height:10%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -33,11 +32,13 @@ html,body{
 }
 #job-button{
     margin-right: 0px;
+    background-color:red;
 }
+
 #resume-button{
     margin-left: 0px;
 }
-#job-resume-line{
+.lines{
     height:2px;
     width:30%;
     border-top: 3px dotted black;
@@ -69,7 +70,7 @@ html,body{
     display: none;
     flex-direction: column;
     align-items: center;
-    margin:100px;
+    margin:50px;
     width:90%;
 }
 .file-upload{
@@ -260,12 +261,13 @@ tr:hover {
     color: #333;
     opacity: 0;
     transition:all 0.3s ease;
+    z-index: 15;
 }
 .alert-class{
     opacity: 1;
 }
-#blur-box{
-    position:relative;
+.blur-box{
+    position:absolute;
     height: 100%;
     width:100%;
     background: rgba(255, 255, 255, 0.9);
@@ -277,6 +279,8 @@ tr:hover {
     color: #333;
     transform-style: preserve-3d;
     transition: transform 0.5s;
+    z-index: 10;
+    
 }
 #alert-cross-button{
     position:absolute;
@@ -292,12 +296,12 @@ tr:hover {
     background: #d4edda;
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+}
+#resume-pdf p{
+    overflow: hidden;
 }
 #resume-list-div{
-    width:100%;
     display: flex;
     flex-wrap: wrap;
 }
@@ -329,4 +333,57 @@ tr:hover {
     height: 30px;
     left:85%;
     top:85%;
+}
+#rating{
+    height: 50%;
+    display: none;
+    flex-direction: column;
+}
+#heading-resume {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.checked {
+    color: orange;
+}
+#loader {
+    border: 16px solid #f3f3f3; 
+    border-top: 16px solid #3498db; 
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 2s linear infinite;
+    position:absolute;
+}
+#loader-box{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
