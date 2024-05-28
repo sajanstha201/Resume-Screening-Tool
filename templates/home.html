@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Job Application Form</title>
 <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
     <div id="blur-box"></div>
@@ -18,13 +20,13 @@
     <div id='resume-nav'>
         <div class='circle-button' id='job-button' onclick='go_to_jb()'>1
         </div>
-        <div id='job-resume-line'>
+        <div class='lines' id='job-resume-line'>
         </div>
         <div class='circle-button' id='resume-button' onclick='go_to_resume()'>2
         </div>
-        <div id='resume-rating-line'>
+        <div class='lines' id='resume-rating-line'>
         </div>
-        <div class='circle-button' id='rating-button' >3
+        <div class='circle-button' id='rating-button' onclick='go_to_rating()' >3
         </div>
     </div>
         <div id="uploading">
@@ -62,6 +64,75 @@
             <div id='resume-list-div'>
             </div>
         </div>
+        <div id='rating'>
+            <div id="heading-resume">
+                <h2>Resume Rating</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>sn.</th>
+                        <th>resume</th>
+                        <th>resume_score</th>
+                        <th>rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>85</td>
+                        <td>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>bikcy </td>
+                        <td>10</td>
+                        <td>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>prince</td>
+                        <td>1</td>
+                        <td>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
 </div>
 <script src="{% static 'script.js' %}"></script>
 </body>

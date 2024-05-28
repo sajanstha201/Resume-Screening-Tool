@@ -3,6 +3,7 @@ let jb_file_activate=true;
 let jb_description_selected=false;
 let job_description_details={name:'',content:''}
 let final_resume_list=[]
+let section_selected=1;
 const dbName = "resume_list";
 const dbVersion = 2;
 const deleteRequest=indexedDB.deleteDatabase(dbName);
@@ -48,27 +49,72 @@ function disable_resume_text(){
 }
 //this is for going to the resume upload area
 function go_to_resume(){
-    get_job_description();
-    if(!jb_description_selected){
-        return;
+    if(section_selected===1){
+        get_job_description();
+        if(!jb_description_selected){
+            return;
+        }
+        document.getElementById('jb').style.display='none';
+        document.getElementById('continue-button').style.display='none'
+        document.getElementById('job-button').style.border='4px solid black';
+        document.getElementById('job-resume-line').style.borderTop='4px solid black';
+        document.getElementById('job-button').style.background='lightgreen';
     }
-    console.log("klafjalsdjfsdl")
-    document.getElementById('jb').style.display='none'
+    else if(section_selected==3){
+        document.getElementById('rating').style.display='none';
+        document.getElementById('rating-button').style.border='2px dotted black';
+        document.getElementById('resume-rating-line').style.borderTop='2px dotted black';
+        document.getElementById('rating-button').style.background='lightblue';
+    }
+    section_selected=2;
     document.getElementById('resume').style.display='flex'
-    document.getElementById('continue-button').style.display='none'
     //document.getElementById('previous-button').style.display='block'
-    document.getElementById('result').style.display='flex'
-    document.getElementById('job-button').style.border='2px solid black'
-    document.getElementById('job-resume-line').style.borderTop='2px solid black';
-
+    document.getElementById('result').style.display='flex';
+    document.getElementById('resume-button').style.background='red';
+    
 }
 //this is for going to job description area
 function go_to_jb(){
+    document.getElementById('resume-button').style.background='lightblue';
+    document.getElementById('resume-button').style.border='2px dotted black';
+    document.getElementById('job-resume-line').style.borderTop='2px dotted black';
+    document.getElementById('resume-rating-line').style.borderTop='2px dotted black';
+    document.getElementById('rating-button').style.background='lightblue';
+    document.getElementById('rating-button').style.border='2px dotted black';
+    section_selected=1;
     document.getElementById('jb').style.display='flex'
     document.getElementById('resume').style.display='none'
     document.getElementById('continue-button').style.display='block'
    // document.getElementById('previous-button').style.display='none';
     document.getElementById('result').style.display='none'
+    document.getElementById('job-button').style.border='2px dotted black';
+    document.getElementById('job-resume-line').style.borderTop='2px dotted black';
+    document.getElementById('rating').style.display='none';
+    document.getElementById('job-button').style.background='red';
+}
+function go_to_rating(){
+    if(section_selected===1){
+        get_job_description();
+        if(!jb_description_selected){
+            return;
+        }
+        document.getElementById('jb').style.display='none';
+        
+    }
+    else if(section_selected===2){
+        document.getElementById('resume').style.display='none';
+        document.getElementById('result').style.display='none';
+    }
+    section_selected=3;
+    document.getElementById('resume-button').style.border='4px solid black';
+    document.getElementById('resume-rating-line').style.borderTop='4px solid black';
+    document.getElementById('resume-button').style.background='lightgreen';
+    document.getElementById('rating').style.display='flex';
+    document.getElementById('rating-button').style.background='lightgreen';
+    document.getElementById('rating-button').style.border='4px solid black';
+    document.getElementById('job-button').style.background='lightgreen';
+    document.getElementById('job-resume-line').style.borderTop='4px solid black';
+    document.getElementById('job-button').style.border='4px solid black';
 }
 // this is for uploading the selected file in the table
 function uploadResume() {
