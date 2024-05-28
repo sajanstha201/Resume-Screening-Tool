@@ -11,7 +11,6 @@ html,body{
 }
 #resume-nav{
     width:40%;
-    height:10%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -33,11 +32,13 @@ html,body{
 }
 #job-button{
     margin-right: 0px;
+    background-color:red;
 }
+
 #resume-button{
     margin-left: 0px;
 }
-#job-resume-line{
+.lines{
     height:2px;
     width:30%;
     border-top: 3px dotted black;
@@ -260,12 +261,13 @@ tr:hover {
     color: #333;
     opacity: 0;
     transition:all 0.3s ease;
+    z-index: 15;
 }
 .alert-class{
     opacity: 1;
 }
 #blur-box{
-    position:relative;
+    position:absolute;
     height: 100%;
     width:100%;
     background: rgba(255, 255, 255, 0.9);
@@ -277,6 +279,8 @@ tr:hover {
     color: #333;
     transform-style: preserve-3d;
     transition: transform 0.5s;
+    z-index: 10;
+    
 }
 #alert-cross-button{
     position:absolute;
@@ -329,4 +333,35 @@ tr:hover {
     height: 30px;
     left:85%;
     top:85%;
+}
+#rating{
+    height: 50%;
+    display: none;
+    flex-direction: column;
+}
+#heading-resume {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.checked {
+    color: orange;
 }
