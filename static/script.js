@@ -64,6 +64,7 @@ function go_to_resume(){
         document.getElementById('rating').style.display='none';
         document.getElementById('rating-button').style.border='2px dotted black';
         document.getElementById('resume-rating-line').style.borderTop='2px dotted black';
+        document.getElementById('resume-button').style.border='2px dotted black';
         document.getElementById('rating-button').style.background='lightblue';
     }
     section_selected=2;
@@ -71,6 +72,7 @@ function go_to_resume(){
     //document.getElementById('previous-button').style.display='block'
     document.getElementById('result').style.display='flex';
     document.getElementById('resume-button').style.background='red';
+    document.getElementById('uploading').style.display='flex';
     
 }
 //this is for going to job description area
@@ -91,6 +93,7 @@ function go_to_jb(){
     document.getElementById('job-resume-line').style.borderTop='2px dotted black';
     document.getElementById('rating').style.display='none';
     document.getElementById('job-button').style.background='red';
+    document.getElementById('uploading').style.display='flex';
 }
 function go_to_rating(){
     if(section_selected===1){
@@ -105,6 +108,7 @@ function go_to_rating(){
         document.getElementById('resume').style.display='none';
         document.getElementById('result').style.display='none';
     }
+    document.getElementById('uploading').style.display='none';
     section_selected=3;
     document.getElementById('resume-button').style.border='4px solid black';
     document.getElementById('resume-rating-line').style.borderTop='4px solid black';
