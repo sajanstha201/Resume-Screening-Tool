@@ -1,5 +1,5 @@
-from data_preprocessing import lemmatize_text
-from evaluation_function import find_cosine_similairty, calculate_match_score,find_cosine_similarity2
+from .data_preprocessing import lemmatize_text
+from .evaluation_function import find_cosine_similairty, calculate_match_score,find_cosine_similarity2
 import math
 #use this function when a critical key is not given as a seprate file
 def rating(jb_description,resume_dict):

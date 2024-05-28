@@ -1,3 +1,4 @@
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
 let resume_file_activate=true;
 let jb_file_activate=true;
@@ -166,12 +167,45 @@ function uploadResume() {
                 v=i;
                 const reader= new FileReader()
                 reader.onload=(event)=>{
-                resolve({name: file.name,content:event.target.result})
+                    if(file.name.endsWith('.pdf')){
+                        const typedArray = new Uint8Array(event.target.result);
+                        var pdfData=typedArray
+                        pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
+                            let text = '';
+                            const promises = [];
+                            for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                                promises.push(pdf.getPage(pageNumber).then(function(page) {
+                                return page.getTextContent();
+                            }));
+                            }
+                            Promise.all(promises).then(function(textContents) {
+                                textContents.forEach(function(content) {
+                                content.items.forEach(function(item) {
+                                    text += item.str + ' ';
+                                    });
+                                });
+                                resolve({name: file.name,content:text})
+                            });
+                        });
+                    }
+                    else if(file.name.endsWith('.doc')||file.name.endsWith('.docx')){
+                        mammoth.extractRawText({arrayBuffer: event.target.result})
+                        .then((text)=>{
+                            resolve({name: file.name,content:text.value});
+                        })
+                        .catch(function(err) {
+                            alert_message('Error During Reading the File')          
+                          console.log(err);
+                          reject(err.target.value)
+                        });
+                    };
                 }
-                reader.onerror=(event)=>{
-                reject(event.target.error)
+                reader.onerror=(event)=>{ 
+                    alert_message('Error During Reading the File')
+                    console.error(event.target.error)
+                    reject(err.target.value)
                 }
-                reader.readAsText(file)
+                reader.readAsArrayBuffer(file);
             })
             fileReadPromises.push(fileReadPromise)
         }
@@ -297,14 +331,30 @@ function resume_upload_normal_form(){
     copy_paste.style.display="block";
     instance_list.innerHTML=""
 }
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
-function get_job_description()
-{
+function extractTextFromPDF(pdfData) {
+    pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
+      let text = '';
+      const promises = [];
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+        promises.push(pdf.getPage(pageNumber).then(function(page) {
+          return page.getTextContent();
+        }));
+      }
+      Promise.all(promises).then(function(textContents) {
+        textContents.forEach(function(content) {
+          content.items.forEach(function(item) {
+            text += item.str + ' ';
+          });
+        });
+        displayText(text);
+      });
+    });
+  }
+function get_job_description(){
     const job_desc_pdf=document.getElementById('job-description-file')
     const job_desc_text=document.getElementById('job-description-text')
     const job_description_files=job_desc_pdf.files
-    if(jb_file_activate)
-    {
+    if(jb_file_activate){
         if(job_description_files.length===0){
             jb_description_selected=false;
             alert_message("No file selected")
@@ -312,14 +362,50 @@ function get_job_description()
         }
         jb_description_selected=true;
         const reader = new FileReader()
+        let file=job_description_files[0]
         reader.onload=(event)=>{
-            const file_content=event.target.result
-            job_description_details={name:job_description_files[0].name,content:file_content}
+            if(file.name.endsWith('.pdf')){
+                const typedArray = new Uint8Array(event.target.result);
+                var pdfData=typedArray
+                pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
+                    let text = '';
+                    const promises = [];
+                    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                        promises.push(pdf.getPage(pageNumber).then(function(page) {
+                        return page.getTextContent();
+                    }));
+                    }
+                    Promise.all(promises).then(function(textContents) {
+                        textContents.forEach(function(content) {
+                        content.items.forEach(function(item) {
+                            text += item.str + ' ';
+                            });
+                        });
+                        job_description_details={
+                            'name':job_description_files[0].name,
+                            'content':text};
+                        
+                    });
+                });
+            }
+            else if(file.name.endsWith('.doc')||file.name.endsWith('.docx')){
+                mammoth.extractRawText({arrayBuffer: event.target.result})
+                .then((text)=>{
+                    job_description_details={
+                        'name':job_description_files[0].name,
+                        'content':text.value};
+                })
+                .catch(function(err) {
+                    alert_message('Error During Reading the File')
+                  console.log(err);
+                });
+            };
         }
         reader.onerror=(event)=>{
+            alert_message('Error During Reading the File')
             console.error(event.target.error)
         }
-        reader.readAsText(job_description_files[0])
+        reader.readAsArrayBuffer(job_description_files[0]);
     }
     else{
         if(job_desc_text.value.trim()===""){
@@ -425,12 +511,17 @@ async function get_resume_details_from_indexdb(){
         }
     })
 }
-
+function display_rating_score(score){
+    var table_body=document.getElementById('table-body');
+    
+}
 async function submitResume(){
     document.getElementById('loader-box').style.display='flex';
-    await request_posting()
+    var rating_score=await request_posting()
+    console.log(rating_score)
     document.getElementById('loader-box').style.display='none';
     go_to_rating()
+    display_rating_score(rating_score);
  }
 async function request_token(){
     let token
@@ -449,14 +540,14 @@ async function request_token(){
     return new Promise(async (resolve,reject)=>{
         const csrfToken = await request_token();
         var resume_data=await get_resume_details_from_indexdb();
-        console.log('succesfully loaded the data:',resume_data)
         await fetch('http://127.0.0.1:8000/get-rating/',{
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
-            body:JSON.stringify(resume_data)
+            body:JSON.stringify({job_description:job_description_details.content,
+                resume_detail:resume_data})
             }).then((response)=>{
                 if(response.ok){
                     return response.json(resume_data)
@@ -472,5 +563,4 @@ async function request_token(){
                 reject(error.target.value)
             })
     })
-
- }
+}
