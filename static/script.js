@@ -2,7 +2,6 @@ let resume_file_activate=true;
 let jb_file_activate=true;
 let jb_description_selected=false;
 let job_description_details={name:'',content:''}
-let final_resume_list=[]
 let section_selected=1;
 const dbName = "resume_list";
 const dbVersion = 2;
@@ -359,7 +358,6 @@ function display_jb_description_file(display_folder){
         inputFile=input_.files[0];
         div_.innerHTML="<div class='cross-buttons' id='instance-jb-cross-button' onclick='display_jb_description_file(false)'>x</div>"+inputFile.name;
         //file_upload.style.border='none';
-        console.log("lksdfjlfjlsjflsdkfl")
         go_to_resume();
     }
     else{
@@ -398,24 +396,80 @@ function alert_message(message){
 
 
 //this function when called retrives all the resume data stored in indexdb and stores it in the list of objects\dictionary  
-function get_resume_details_from_indexdb()
-{
-    const dbName = "resume_list";
-    const request = indexedDB.open(dbName);
-    request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction(["resumes"], "readonly"); 
-        const objectStore = transaction.objectStore("resumes");
-        const request = objectStore.getAll();
+async function get_resume_details_from_indexdb(){
+    return new Promise((resolve,reject)=>{
+        var final_resume_list={}
+        const dbName = "resume_list";
+        const request = indexedDB.open(dbName);
         request.onsuccess = (event) => {
-            const allItems = event.target.result;
-            for (let i=0;i<allItems.length;i++)
-                {
-                    final_resume_list.push({sn:i,name:allItems[i].name,content:allItems[i].content})
-                }
-        }}
-        request.onerror = (event) => {
-            console.error('Error retrieving items:', event.target.error);
+            const db = event.target.result;
+            const transaction = db.transaction(["resumes"], "readonly"); 
+            const objectStore = transaction.objectStore("resumes");
+            const request = objectStore.getAll();
+            request.onsuccess = (event) => {
+                const allItems = event.target.result;
+                for (let i=0;i<allItems.length;i++)
+                    {
+                        final_resume_list[allItems[i].name]=allItems[i].content
+                    }
+                resolve(final_resume_list)
             }
+            request.onerror=(event)=>{
+                reject(event.target.error)
+            }
+        }
+        request.onerror = (event) => {
+            reject(event.target.error)
+            console.error('Error retrieving items:', event.target.error);
+        }
+    })
 }
 
+async function submitResume(){
+    document.getElementById('loader-box').style.display='flex';
+    await request_posting()
+    document.getElementById('loader-box').style.display='none';
+    go_to_rating()
+ }
+async function request_token(){
+    let token
+    await fetch('http://127.0.0.1:8000/get-token/',{
+        method:'GET'
+    }).then(response=>{
+        return response.json()
+    }).then(data=>{
+        token=data
+    }).catch(error=>{
+        console.log(error)
+    })
+    return token.token
+}
+ async function request_posting(){
+    return new Promise(async (resolve,reject)=>{
+        const csrfToken = await request_token();
+        var resume_data=await get_resume_details_from_indexdb();
+        console.log('succesfully loaded the data:',resume_data)
+        await fetch('http://127.0.0.1:8000/get-rating/',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body:JSON.stringify(resume_data)
+            }).then((response)=>{
+                if(response.ok){
+                    return response.json(resume_data)
+                }
+                alert_message('GOT SOME ERROR!!')
+                document.getElementById('loader-box').style.display='none';
+                reject('error detected')
+            }).then((data)=>{
+                resolve(data);
+            }).catch(error=>{
+                alert_message('GOT SOME ERROR!!: ')
+                document.getElementById('loader-box').style.display='none';
+                reject(error.target.value)
+            })
+    })
+
+ }
