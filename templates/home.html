@@ -10,8 +10,11 @@
 
 </head>
 <body>
-    <div id="blur-box"></div>
-    <div id="alert-box">
+    <div class="blur-box" id="blur-box"></div>
+    <div class="blur-box" id='loader-box'>
+        <div id='loader'></div>
+    </div>
+    <div  id="alert-box">
         <div id="alert-cross-button" class="cross-buttons"onclick="remove_alert_box()">x</div>
         <p>information</p>
     </div>
@@ -60,7 +63,7 @@
         </div>
         <div id='result'>
             <button class="button" onclick="uploadResume()">Add</button>
-            <button class="button" id="submit-button">Submit</button>
+            <button class="button" id="submit-button" onclick="submitResume()">Submit</button>
             <div id='resume-list-div'>
             </div>
         </div>
