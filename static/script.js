@@ -1,3 +1,4 @@
+
 let resume_file_activate=true;
 let jb_file_activate=true;
 let jb_description_selected=false;
@@ -296,7 +297,7 @@ function resume_upload_normal_form(){
     copy_paste.style.display="block";
     instance_list.innerHTML=""
 }
-
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 function get_job_description()
 {
     const job_desc_pdf=document.getElementById('job-description-file')
