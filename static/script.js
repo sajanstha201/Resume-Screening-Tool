@@ -1,4 +1,3 @@
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
 let resume_file_activate=true;
 let jb_file_activate=true;
@@ -154,7 +153,6 @@ function uploadResume() {
             alert_message("No File Selected")
             return;
         }
-        activate_loader(true);
         resume_upload_normal_form();
         const dbName = "resume_list";
         const request = indexedDB.open(dbName);
@@ -168,51 +166,15 @@ function uploadResume() {
                 v=i;
                 const reader= new FileReader()
                 reader.onload=(event)=>{
-                    if(file.name.endsWith('.pdf')){
-                        const typedArray = new Uint8Array(event.target.result);
-                        var pdfData=typedArray
-                        pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
-                            let text = '';
-                            const promises = [];
-                            for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-                                promises.push(pdf.getPage(pageNumber).then(function(page) {
-                                return page.getTextContent();
-                            }));
-                            }
-                            Promise.all(promises).then(function(textContents) {
-                                textContents.forEach(function(content) {
-                                content.items.forEach(function(item) {
-                                    text += item.str + ' ';
-                                    });
-                                });
-                                resolve({name: file.name,content:text})
-                            });
-                        });
-                    }
-                    else if(file.name.endsWith('.doc')||file.name.endsWith('.docx')){
-                        mammoth.extractRawText({arrayBuffer: event.target.result})
-                        .then((text)=>{
-                            resolve({name: file.name,content:text.value});
-                        })
-                        .catch(function(err) {
-                            activate_loader(false)
-                            alert_message('Error During Reading the File')          
-                          console.log(err);
-                          reject(err.target.value)
-                          
-                        });
-                    };
+                resolve({name: file.name,content:event.target.result})
                 }
-                reader.onerror=(event)=>{ 
-                    activate_loader(false)
-                    alert_message('Error During Reading the File')
-                    console.error(event.target.error)
-                    reject(err.target.value)
+                reader.onerror=(event)=>{
+                reject(event.target.error)
                 }
-                reader.readAsArrayBuffer(file);
+                reader.readAsText(file)
             })
             fileReadPromises.push(fileReadPromise)
-        }
+    }
         try{
             const fileContents=await Promise.all(fileReadPromises)
             const transaction = db.transaction(["resumes"], "readwrite");
@@ -221,19 +183,17 @@ function uploadResume() {
             objectStore.add(fileData)
             })
             transaction.oncomplete = () => {
+            console.log("Files stored in IndexedDB successfully!");
             document.getElementById('resume-content-file').value='';
             fileInput.value='';
             showUploadedResume();
-            activate_loader(false)
             }
         }
         catch(error){
-            activate_loader(false)
             console.log(error);
         } 
         }
         request.onerror=(event)=>{
-            activate_loader(false)
             console.error(event.target.error);
         }
     }
@@ -252,7 +212,8 @@ request.onsuccess = (event) => {
         const list=document.getElementById('resume-list-div');
         list.innerHTML=''
         console.log(allItems)
-        for(let i=0;i<allItems.length;i++){   
+        for(let i=0;i<allItems.length;i++)
+        {   
             id=allItems[i].name
             const Text='<div id="resume-pdf"><p>'+allItems[i].name+'</p></div><div class="resume-cross-buttons" id="'+id+'" onclick="remove_pdf(this)">x</div>'
             //const Text = '<tr><td>' + allItems[i].name + '</td><td><button type="button" id="'+id+'"onclick="remove_pdf(this)"> remove</button></td></tr>';
@@ -260,7 +221,7 @@ request.onsuccess = (event) => {
         }
     }
     request.onerror = (event) => {
-        console.error('Error retrieving items:', event.target.error);
+    console.error('Error retrieving items:', event.target.error);
     }
 }
 }
@@ -285,7 +246,7 @@ function remove_pdf(event)
                     cursor_request.onsuccess=()=>{
                         showUploadedResume();
                     }
-//hi
+ 
                 }
                 else{
                     cursor.continue();
@@ -337,30 +298,14 @@ function resume_upload_normal_form(){
     copy_paste.style.display="block";
     instance_list.innerHTML=""
 }
-function extractTextFromPDF(pdfData) {
-    pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
-      let text = '';
-      const promises = [];
-      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-        promises.push(pdf.getPage(pageNumber).then(function(page) {
-          return page.getTextContent();
-        }));
-      }
-      Promise.all(promises).then(function(textContents) {
-        textContents.forEach(function(content) {
-          content.items.forEach(function(item) {
-            text += item.str + ' ';
-          });
-        });
-        displayText(text);
-      });
-    });
-  }
-function get_job_description(){
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+function get_job_description()
+{
     const job_desc_pdf=document.getElementById('job-description-file')
     const job_desc_text=document.getElementById('job-description-text')
     const job_description_files=job_desc_pdf.files
-    if(jb_file_activate){
+    if(jb_file_activate)
+    {
         if(job_description_files.length===0){
             jb_description_selected=false;
             alert_message("No file selected")
@@ -368,50 +313,14 @@ function get_job_description(){
         }
         jb_description_selected=true;
         const reader = new FileReader()
-        let file=job_description_files[0]
         reader.onload=(event)=>{
-            if(file.name.endsWith('.pdf')){
-                const typedArray = new Uint8Array(event.target.result);
-                var pdfData=typedArray
-                pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
-                    let text = '';
-                    const promises = [];
-                    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-                        promises.push(pdf.getPage(pageNumber).then(function(page) {
-                        return page.getTextContent();
-                    }));
-                    }
-                    Promise.all(promises).then(function(textContents) {
-                        textContents.forEach(function(content) {
-                        content.items.forEach(function(item) {
-                            text += item.str + ' ';
-                            });
-                        });
-                        job_description_details={
-                            'name':job_description_files[0].name,
-                            'content':text};
-                        
-                    });
-                });
-            }
-            else if(file.name.endsWith('.doc')||file.name.endsWith('.docx')){
-                mammoth.extractRawText({arrayBuffer: event.target.result})
-                .then((text)=>{
-                    job_description_details={
-                        'name':job_description_files[0].name,
-                        'content':text.value};
-                })
-                .catch(function(err) {
-                    alert_message('Error During Reading the File')
-                  console.log(err);
-                });
-            };
+            const file_content=event.target.result
+            job_description_details={name:job_description_files[0].name,content:file_content}
         }
         reader.onerror=(event)=>{
-            alert_message('Error During Reading the File')
             console.error(event.target.error)
         }
-        reader.readAsArrayBuffer(job_description_files[0]);
+        reader.readAsText(job_description_files[0])
     }
     else{
         if(job_desc_text.value.trim()===""){
@@ -501,7 +410,8 @@ async function get_resume_details_from_indexdb(){
             const request = objectStore.getAll();
             request.onsuccess = (event) => {
                 const allItems = event.target.result;
-                for (let i=0;i<allItems.length;i++){
+                for (let i=0;i<allItems.length ;i++)
+                    {
                         final_resume_list[allItems[i].name]=allItems[i].content
                     }
                 resolve(final_resume_list)
@@ -516,29 +426,12 @@ async function get_resume_details_from_indexdb(){
         }
     })
 }
-function display_rating_score(score){
-    var table_body=document.getElementById('table-body');
-    table_body.innerHTML=""
-    for (const key in score){
-        var checked_star='';
-        var unchecked_star='';
-        for(i=0;i<score[key];i++){
-            checked_star+='<span class="fa fa-star checked"></span>'
-        }
-        for(i=0;i<10-score[key];i++){
-            unchecked_star+='<span class="fa fa-star"></span>'
-        }
-        table_body.innerHTML+='<tr><td>'+key+'<td>'+score[key]+'</td><td>'+checked_star+unchecked_star+'</td></td></tr>'
-    }
 
-
-}
 async function submitResume(){
     document.getElementById('loader-box').style.display='flex';
-    var rating_score=await request_posting()
+    await request_posting()
     document.getElementById('loader-box').style.display='none';
     go_to_rating()
-    display_rating_score(rating_score);
  }
 async function request_token(){
     let token
@@ -557,15 +450,14 @@ async function request_token(){
     return new Promise(async (resolve,reject)=>{
         const csrfToken = await request_token();
         var resume_data=await get_resume_details_from_indexdb();
-        console.log(resume_data)
+        console.log('succesfully loaded the data:',resume_data)
         await fetch('http://127.0.0.1:8000/get-rating/',{
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
-            body:JSON.stringify({job_description:job_description_details.content,
-                resume_detail:resume_data})
+            body:JSON.stringify(resume_data)
             }).then((response)=>{
                 if(response.ok){
                     return response.json(resume_data)
@@ -581,14 +473,41 @@ async function request_token(){
                 reject(error.target.value)
             })
     })
-}
-
-function activate_loader(bool){
-    if(bool){
-        document.getElementById('loader-box').style.display='flex'
-    }
-    else{
-        document.getElementById('loader-box').style.display='none'
-    }
     
-}
+ }
+//checks if duplicate pdfname is present in the indexdb or not and returns true if duplicate name is present and false if not
+ function check_duplicate_pdfname(pdfname)
+ {
+    const dbName = "resume_list";
+    const request = indexedDB.open(dbName);
+    request.onsuccess = (event) => {
+        console.log("hi1")
+        const db = event.target.result;
+        const transaction = db.transaction(["resumes"], "readonly"); 
+        const objectStore = transaction.objectStore("resumes");
+        const request = objectStore.getAll();
+        request.onsuccess = (event) => {
+            console.log("hi2")
+            const allItems = event.target.result;
+            console.log(allItems.length)
+            for(let i=0;i<allItems.length;i++)
+                {
+                    if(pdfname===allItems[i].name)
+                        {
+                            return true;
+                        }
+                }
+            
+        }
+        request.onerror=(event)=>{
+            reject(event.target.error)
+        }
+    }
+    request.onerror = (event) => {
+        reject(event.target.error)
+        console.error('Error retrieving items:', event.target.error);
+    }
+    return false;
+ }
+
+ 
