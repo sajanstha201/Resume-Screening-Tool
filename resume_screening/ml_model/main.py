@@ -9,7 +9,7 @@ def rating(jb_description,resume_dict):
         lemmatized_resume=lemmatize_text(resume)
         match_score=calculate_match_score(critical_list=critical_keyword,text_list=lemmatized_resume)
         similar_score=find_cosine_similarity2(jb_description,resume)
-        score_dict[key]=math.ceil((similar_score+match_score*100)/2)
+        score_dict[key]=math.ceil((similar_score*20+match_score*20)/2)
     return ordering_dict(score_dict)
 
 #use this function when the user give a seprate file for critical keyword

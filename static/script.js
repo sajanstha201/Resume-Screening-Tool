@@ -488,6 +488,7 @@ function display_jb_description_file(display_folder){
         inputFile=input_.files[0];
         div_.innerHTML="<div class='cross-buttons' id='instance-jb-cross-button' onclick='display_jb_description_file(false)'>x</div>"+inputFile.name;
         //file_upload.style.border='none';
+        document.getElementById('job-file-upload').style.border='none'
         go_to_resume();
     }
     else{
@@ -501,6 +502,7 @@ function display_jb_description_file(display_folder){
         filteredFiles.forEach(file=>dataTransfer.items.add(file))
         input_.files=dataTransfer.files;
         jb_description_selected=false;
+        document.getElementById('job-file-upload').style.border='2px dashed #ccc'
         //file_upload.style.border='2px dashed #ccc';
     }
 }
@@ -589,6 +591,7 @@ async function request_token(){
     }).catch(error=>{
         console.log(error)
     })
+    console.log(token)
     return token.token
 }
  async function request_posting(){
