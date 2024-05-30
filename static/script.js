@@ -592,3 +592,39 @@ function activate_loader(bool){
     }
     
 }
+
+
+//checks if duplicate pdfname is present in the indexdb or not and returns true if duplicate name is present and false if not
+function check_duplicate_pdfname(pdfname)
+{
+   const dbName = "resume_list";
+   const request = indexedDB.open(dbName);
+   request.onsuccess = (event) => {
+       console.log("hi1")
+       const db = event.target.result;
+       const transaction = db.transaction(["resumes"], "readonly"); 
+       const objectStore = transaction.objectStore("resumes");
+       const request = objectStore.getAll();
+       request.onsuccess = (event) => {
+           console.log("hi2")
+           const allItems = event.target.result;
+           console.log(allItems.length)
+           for(let i=0;i<allItems.length;i++)
+               {
+                   if(pdfname===allItems[i].name)
+                       {
+                           return true;
+                       }
+               }
+           
+       }
+       request.onerror=(event)=>{
+           reject(event.target.error)
+       }
+   }
+   request.onerror = (event) => {
+       reject(event.target.error)
+       console.error('Error retrieving items:', event.target.error);
+   }
+   return false;
+}
