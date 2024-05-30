@@ -121,6 +121,37 @@ function go_to_rating(){
     document.getElementById('job-resume-line').style.borderTop='4px solid black';
     document.getElementById('job-button').style.border='4px solid black';
 }
+
+//checks if duplicate pdfname is present in the indexdb or not and returns true if duplicate name is present and false if not
+function check_duplicate_pdfname(pdfname){
+    return new Promise((resolve,reject)=>{
+        const dbName = "resume_list";
+        const request = indexedDB.open(dbName);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(["resumes"], "readonly"); 
+            const objectStore = transaction.objectStore("resumes");
+            const request = objectStore.getAll();
+            request.onsuccess = (event) => {
+                const allItems = event.target.result;
+                for(let i=0;i<allItems.length;i++){
+                        if(pdfname===allItems[i].name){
+                                resolve(true)
+                            }
+                    }
+                resolve(false)
+            }
+            request.onerror=(event)=>{
+                reject(event.target.error)
+            }
+        }
+        request.onerror = (event) => {
+            reject(event.target.error)
+            console.error('Error retrieving items:', event.target.error);
+        }
+    })
+
+}
 // this is for uploading the selected file in the table
 function uploadResume() {
     document.getElementById('instance-upload-file').style.display='none';
@@ -163,55 +194,62 @@ function uploadResume() {
         const fileReadPromises=[]
         for (let i = 0; i < selectedFiles.length; i++) {
             const file=selectedFiles[i]
-            var v=0;
-            const fileReadPromise=await new Promise((resolve,reject)=>{
+            const duplicate=await check_duplicate_pdfname(file.name);
+            if(!duplicate ){
+                var v=0;
+                const fileReadPromise=await new Promise((resolve,reject)=>{
                 v=i;
                 const reader= new FileReader()
                 reader.onload=(event)=>{
                     if(file.name.endsWith('.pdf')){
-                        const typedArray = new Uint8Array(event.target.result);
-                        var pdfData=typedArray
-                        pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
-                            let text = '';
-                            const promises = [];
-                            for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
-                                promises.push(pdf.getPage(pageNumber).then(function(page) {
-                                return page.getTextContent();
-                            }));
-                            }
-                            Promise.all(promises).then(function(textContents) {
-                                textContents.forEach(function(content) {
-                                content.items.forEach(function(item) {
-                                    text += item.str + ' ';
+                            const typedArray = new Uint8Array(event.target.result);
+                            var pdfData=typedArray
+                            pdfjsLib.getDocument(pdfData).promise.then(function(pdf) {
+                                let text = '';
+                                const promises = [];
+                                for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                                    promises.push(pdf.getPage(pageNumber).then(function(page) {
+                                    return page.getTextContent();
+                                }));
+                                }
+                                Promise.all(promises).then(function(textContents) {
+                                    textContents.forEach(function(content) {
+                                    content.items.forEach(function(item) {
+                                        text += item.str + ' ';
+                                        });
                                     });
+                                    resolve({name: file.name,content:text})
                                 });
-                                resolve({name: file.name,content:text})
                             });
-                        });
+                        }
+                        else if(file.name.endsWith('.doc')||file.name.endsWith('.docx')){
+                            mammoth.extractRawText({arrayBuffer: event.target.result})
+                            .then((text)=>{
+                                resolve({name: file.name,content:text.value});
+                            })
+                            .catch(function(err) {
+                                activate_loader(false)
+                                alert_message('Error During Reading the File')          
+                            console.log(err);
+                            reject(err.target.value)
+                            
+                            });
+                        };
                     }
-                    else if(file.name.endsWith('.doc')||file.name.endsWith('.docx')){
-                        mammoth.extractRawText({arrayBuffer: event.target.result})
-                        .then((text)=>{
-                            resolve({name: file.name,content:text.value});
-                        })
-                        .catch(function(err) {
-                            activate_loader(false)
-                            alert_message('Error During Reading the File')          
-                          console.log(err);
-                          reject(err.target.value)
-                          
-                        });
-                    };
-                }
-                reader.onerror=(event)=>{ 
-                    activate_loader(false)
-                    alert_message('Error During Reading the File')
-                    console.error(event.target.error)
-                    reject(err.target.value)
-                }
-                reader.readAsArrayBuffer(file);
-            })
-            fileReadPromises.push(fileReadPromise)
+                    reader.onerror=(event)=>{ 
+                        activate_loader(false)
+                        alert_message('Error During Reading the File')
+                        console.error(event.target.error)
+                        reject(err.target.value)
+                    }
+                    reader.readAsArrayBuffer(file);
+                })
+                fileReadPromises.push(fileReadPromise)
+            }
+            else{
+                const str='Duplicate Document Detected: '+file.name
+                alert_message(str)
+            }
         }
         try{
             const fileContents=await Promise.all(fileReadPromises)
@@ -593,38 +631,3 @@ function activate_loader(bool){
     
 }
 
-
-//checks if duplicate pdfname is present in the indexdb or not and returns true if duplicate name is present and false if not
-function check_duplicate_pdfname(pdfname)
-{
-   const dbName = "resume_list";
-   const request = indexedDB.open(dbName);
-   request.onsuccess = (event) => {
-       console.log("hi1")
-       const db = event.target.result;
-       const transaction = db.transaction(["resumes"], "readonly"); 
-       const objectStore = transaction.objectStore("resumes");
-       const request = objectStore.getAll();
-       request.onsuccess = (event) => {
-           console.log("hi2")
-           const allItems = event.target.result;
-           console.log(allItems.length)
-           for(let i=0;i<allItems.length;i++)
-               {
-                   if(pdfname===allItems[i].name)
-                       {
-                           return true;
-                       }
-               }
-           
-       }
-       request.onerror=(event)=>{
-           reject(event.target.error)
-       }
-   }
-   request.onerror = (event) => {
-       reject(event.target.error)
-       console.error('Error retrieving items:', event.target.error);
-   }
-   return false;
-}
