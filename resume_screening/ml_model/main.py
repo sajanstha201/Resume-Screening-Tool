@@ -32,6 +32,9 @@ def ordering_dict(score):
                 max_key=key
         new_dict[max_key]=score[max_key]
         score.pop(max_key)
+    for key,value in new_dict.items():
+        if(value>10):
+            new_dict[key]=10
     return new_dict
 
 

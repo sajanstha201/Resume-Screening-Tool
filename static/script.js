@@ -237,7 +237,7 @@ function uploadResume() {
             console.error(event.target.error);
         }
     }
-    }
+}
 //this is for showing all the uploaded file in the table form after adding
 function showUploadedResume() {
 const dbName = "resume_list";
@@ -251,6 +251,7 @@ request.onsuccess = (event) => {
         const allItems = event.target.result;
         const list=document.getElementById('resume-list-div');
         list.innerHTML=''
+        console.log(allItems)
         for(let i=0;i<allItems.length;i++){   
             id=allItems[i].name
             const Text='<div id="resume-pdf"><p>'+allItems[i].name+'</p></div><div class="resume-cross-buttons" id="'+id+'" onclick="remove_pdf(this)">x</div>'
@@ -500,8 +501,7 @@ async function get_resume_details_from_indexdb(){
             const request = objectStore.getAll();
             request.onsuccess = (event) => {
                 const allItems = event.target.result;
-                for (let i=0;i<allItems.length;i++)
-                    {
+                for (let i=0;i<allItems.length;i++){
                         final_resume_list[allItems[i].name]=allItems[i].content
                     }
                 resolve(final_resume_list)
