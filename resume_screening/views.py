@@ -17,7 +17,7 @@ def rating_response(request):
     data_dict = json.loads(data)
     job_description=data_dict['job_description']
     resume_detail=data_dict['resume_detail']
-    rating_score=rating(jb_description=job_description,resume_dict=resume_detail)
+    rating_score,pdf_score=rating(jb_description=job_description,resume_dict=resume_detail)
     return JsonResponse(rating_score)
 
 def token_response(request):
