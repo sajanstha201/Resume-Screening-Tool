@@ -18,8 +18,8 @@ html,body{
 .circle-button{
     width:50px;
     height: 50px;
-    background-color: lightblue;
-    color: white;
+    background-color: white;
+    color:black;
     margin: 0px;
     border-radius: 50px;
     border: 2px dashed black;
@@ -32,7 +32,9 @@ html,body{
 }
 #job-button{
     margin-right: 0px;
-    background-color:red;
+    background-color:grey;
+    color:white;
+    border: 2px solid black;
 }
 
 #resume-button{
@@ -117,7 +119,7 @@ html,body{
 .jb-button{
     border:none;
     background-color:white;
-    color:blue;
+    color:black;
     cursor:pointer;
 }
 #job-file-upload input[type="file"] ,#resume-file-upload input[type="file"]{
@@ -128,8 +130,8 @@ html,body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color:blue;
-    border:2px solid blue;
+    color:black;
+    border:2px solid black;
     border-radius:5px;
     padding:20px;
     text-align:center;
@@ -187,7 +189,8 @@ tr:hover {
     border-radius:10px;
     margin:10px;
     padding:10px;
-    background: #d4edda;
+    background: gray;
+    color: white;
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -217,15 +220,17 @@ tr:hover {
     font-size:10px;
 }
 #instance-file-cross-button{
-    height:7px;
-    width:7px;
+    height:10px;
+    width:10px;
     border-radius:7px;
     position:relative;
-    right:-98%;
+    color: black;
+    right:-95%;
     top:-50%;
 }
 #instance-jb-cross-button{
     position: absolute;
+    color: black;
     top:5px;
     right: 5px;
     height:10px;
@@ -240,7 +245,8 @@ tr:hover {
     padding: 20px;
     align-items: center;
     justify-content: center;
-    background: #d4edda;
+    background: grey;
+    color: white;
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
@@ -250,7 +256,7 @@ tr:hover {
     left:35%;
     width: 30%;
     height: 30%;
-    background: #d4edda;
+    background: gray;
     border: 1px solid #ccc;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -293,7 +299,8 @@ tr:hover {
     border-radius:10px;
     margin:10px;
     padding:10px;
-    background: #d4edda;
+    background: gray;
+    color: white;
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -386,4 +393,10 @@ th {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+#resume-copy-paste-button{
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    color: black;
 }
