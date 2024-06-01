@@ -35,7 +35,7 @@ function go_to_resume(){
         document.getElementById('continue-button').style.display='none'
         document.getElementById('job-button').style.border='2px solid black';
         document.getElementById('job-resume-line').style.borderTop='2px solid black';
-        document.getElementById('job-button').style.background='grey';
+        document.getElementById('job-button').style.background='#d4edda';
 
     }
     else if(section_selected==3){
@@ -43,15 +43,12 @@ function go_to_resume(){
         document.getElementById('rating-button').style.border='2px dashed black';
         document.getElementById('resume-rating-line').style.borderTop='2px dashed black';
         document.getElementById('rating-button').style.background='white';
-        document.getElementById('rating-button').style.color='black';
-
     }
     section_selected=2;
     document.getElementById('resume').style.display='flex'
     //document.getElementById('previous-button').style.display='block'
     document.getElementById('result').style.display='flex';
-    document.getElementById('resume-button').style.background='grey';
-    document.getElementById('resume-button').style.color='white';
+    document.getElementById('resume-button').style.background='#d4edda';
     document.getElementById('uploading').style.display='flex';
     document.getElementById('resume-button').style.border='2px solid black';
     
@@ -63,9 +60,7 @@ function go_to_jb(){
     document.getElementById('job-resume-line').style.borderTop='2px dashed black';
     document.getElementById('resume-rating-line').style.borderTop='2px dashed black';
     document.getElementById('rating-button').style.background='white';
-    document.getElementById('resume-button').style.color='black';
     document.getElementById('rating-button').style.border='2px dashed black';
-    document.getElementById('rating-button').style.color='black';
     section_selected=1;
     document.getElementById('jb').style.display='flex'
     document.getElementById('resume').style.display='none'
@@ -93,13 +88,11 @@ function go_to_rating(){
     section_selected=3;
     document.getElementById('resume-button').style.border='2px solid black';
     document.getElementById('resume-rating-line').style.borderTop='2px solid black';
-    document.getElementById('resume-button').style.background='grey';
+    document.getElementById('resume-button').style.background='#d4edda';
     document.getElementById('rating').style.display='flex';
-    document.getElementById('rating-button').style.background='grey';
+    document.getElementById('rating-button').style.background='#d4edda';
     document.getElementById('rating-button').style.border='2px solid black';
-    document.getElementById('job-button').style.background='grey';
+    document.getElementById('job-button').style.background='#d4edda';
     document.getElementById('job-resume-line').style.borderTop='2px solid black';
     document.getElementById('job-button').style.border='2px solid black';
-    document.getElementById('resume-button').style.color='white';
-    document.getElementById('rating-button').style.color='white';
 }

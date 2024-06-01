@@ -42,7 +42,7 @@ function go_to_resume(){
         document.getElementById('rating-button').style.border='2px dotted black';
         document.getElementById('resume-rating-line').style.borderTop='2px dotted black';
         document.getElementById('resume-button').style.border='2px dotted black';
-        document.getElementById('rating-button').style.background='lightblue';
+        document.getElementById('rating-button').style.background='#d4edda';
     }
     section_selected=2;
     document.getElementById('resume').style.display='flex'
@@ -54,11 +54,11 @@ function go_to_resume(){
 }
 //this is for going to job description area
 function go_to_jb(){
-    document.getElementById('resume-button').style.background='lightblue';
+    document.getElementById('resume-button').style.background='#d4edda';
     document.getElementById('resume-button').style.border='2px dotted black';
     document.getElementById('job-resume-line').style.borderTop='2px dotted black';
     document.getElementById('resume-rating-line').style.borderTop='2px dotted black';
-    document.getElementById('rating-button').style.background='lightblue';
+    document.getElementById('rating-button').style.background='#d4edda';
     document.getElementById('rating-button').style.border='2px dotted black';
     section_selected=1;
     document.getElementById('jb').style.display='flex'
@@ -89,11 +89,11 @@ function go_to_rating(){
     section_selected=3;
     document.getElementById('resume-button').style.border='4px solid black';
     document.getElementById('resume-rating-line').style.borderTop='4px solid black';
-    document.getElementById('resume-button').style.background='lightgreen';
+    document.getElementById('resume-button').style.background='#d4edda';
     document.getElementById('rating').style.display='flex';
-    document.getElementById('rating-button').style.background='lightgreen';
+    document.getElementById('rating-button').style.background='#d4edda';
     document.getElementById('rating-button').style.border='4px solid black';
-    document.getElementById('job-button').style.background='lightgreen';
+    document.getElementById('job-button').style.background='#d4edda';
     document.getElementById('job-resume-line').style.borderTop='4px solid black';
     document.getElementById('job-button').style.border='4px solid black';
 }
