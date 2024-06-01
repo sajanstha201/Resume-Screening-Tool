@@ -128,8 +128,8 @@ html,body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color:blue;
-    border:2px solid blue;
+    color:black;
+    border:2px solid black;
     border-radius:5px;
     padding:20px;
     text-align:center;
@@ -240,7 +240,7 @@ tr:hover {
     padding: 20px;
     align-items: center;
     justify-content: center;
-    background: #d4edda;
+    background:green;
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
