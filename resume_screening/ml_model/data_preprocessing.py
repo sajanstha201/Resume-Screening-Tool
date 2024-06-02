@@ -15,8 +15,15 @@ def lemmatize_text(text):
       if pos_tag in ['a','n','r']:
         lemma=lemmatizer.lemmatize(word)
       else:
+        print(lemma,pos_tag,'\n')
         lemma=word
       lemma_list.append(lemma)
   lemma_list=[lemma for lemma in lemma_list if lemma not in ['.',',',')','(','!','-']]
-  return list(set(lemma_list))
-
+  lemma_list_lower=[]
+  for lemma in lemma_list:
+    lemma_list_lower.append(lemma.lower())
+  lemma_list_no_duplicate=[]
+  for i in range(0,len(lemma_list_lower)):
+    if(lemma_list_lower[i] not in lemma_list_no_duplicate[0:len(lemma_list_no_duplicate)+1]):
+      lemma_list_no_duplicate.append(lemma_list_lower[i])
+  return list(set(lemma_list_no_duplicate))
