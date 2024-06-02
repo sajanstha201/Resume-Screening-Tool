@@ -1,9 +1,19 @@
 import nltk
+from pathlib import Path
+import os
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+def remove_common_words(lemmas):
+  current_dir=Path(__file__).parent
+  with open(os.path.join(current_dir,'common_words_in_jb_description.txt'),'r') as file:
+    content=file.read()
+  common_words=[]
+  [common_words.append(words) for row in content.split('\n') for words in row.split(',')]
+  return [lemma for lemma in lemmas if lemma not in common_words]
+
 def lemmatize_text(text):
   lemmatizer=WordNetLemmatizer()
   tokenized_text=word_tokenize(text)
@@ -18,5 +28,15 @@ def lemmatize_text(text):
         lemma=word
       lemma_list.append(lemma)
   lemma_list=[lemma for lemma in lemma_list if lemma not in ['.',',',')','(','!','-']]
-  return list(set(lemma_list))
+  lemma_list_lower=[]
+  for lemma in lemma_list:
+    lemma_list_lower.append(lemma.lower())
+  lemma_list_no_duplicate=[]
+  for i in range(0,len(lemma_list_lower)):
+    if(lemma_list_lower[i] not in lemma_list_no_duplicate[0:len(lemma_list_no_duplicate)+1]):
+      lemma_list_no_duplicate.append(lemma_list_lower[i])
+  final_list=remove_common_words(lemma_list_no_duplicate)
+  return list(set(final_list))
 
+if __name__=="__main__":
+  remove_common_words(['sajan','shresth'])

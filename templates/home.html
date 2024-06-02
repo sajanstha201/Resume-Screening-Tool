@@ -14,6 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.5.1/mammoth.browser.min.js"></script>
 </head>
 <body>
+    
     <div class="blur-box" id="blur-box"></div>
     <div class="blur-box" id='loader-box'>
         <div id='loader'></div>
@@ -23,6 +24,7 @@
         <p>information</p>
     </div>
 <div class="container">
+    <h1>Resume Screening</h1>
     <!--<button class="button" id='previous-button' onclick="go_to_jb()">previous</button>-->
     <div id='resume-nav'>
         <div class='circle-button' id='job-button' onclick='go_to_jb()'>1
@@ -47,7 +49,7 @@
                 </div>
                 <div class="file-upload" id='job-file-upload-text'>
                     <textarea id="job-description-text" placeholder="Type or paste resumes here"></textarea>
-                    <button class="jb-button" onClick="disable_job_text()" id='job-copy-paste-button'>upload or drop</button>
+                    <button class="jb-button" onClick="disable_job_text()" id='job-upload-button'>upload or drop</button>
                     <button id='continue-button' onclick="go_to_resume()">continue</button>
                 </div>
             </div>
@@ -57,11 +59,11 @@
                     <div id="instance-upload-file"></div>
                     <label for="resume-content-file" id="resume-content-label">Upload or Drop Resume Content <p> as .pdf or .docx file </p></label>
                     <input onchange="showSelectedResumeName(this)"type="file" id="resume-content-file" accept=".pdf,.docx" multiple>
-                    <button onClick="disable_resume_file()" id='resume-copy-paste-button'> copy paste</button>
+                    <button onClick="disable_resume_file()"  class='resume-button' id='resume-copy-paste-button'> copy paste</button>
                 </div>
                 <div id='resume-file-upload-text'>
                     <textarea id="resume-content-text" placeholder="Type or paste resumes here"></textarea>
-                    <button onClick="disable_resume_text()">upload or drop</button>
+                    <button onClick="disable_resume_text()" class='resume-button' id="resume-upload-button">upload or drop</button>
                 </div>
             </div>
         </div>
