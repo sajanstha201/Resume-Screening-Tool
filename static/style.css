@@ -311,6 +311,19 @@ tr:hover {
 #resume-list-div{
     display: flex;
     flex-wrap: wrap;
+    overflow: auto;
+    border: 2px solid black;
+    justify-content: center;
+    padding: 20px;
+    border-radius:20px;
+    width: 60%;
+    height:50vh;
+}
+#resume-list-outer-div{
+    display: none;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
 }
 .resume-cross-buttons{
     height:10px;

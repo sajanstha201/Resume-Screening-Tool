@@ -1,5 +1,6 @@
 html,body{
     height: 100%;
+    text-align: center;
 }
 .container{
     display:flex;
@@ -32,6 +33,7 @@ html,body{
 #job-button{
     margin-right: 0px;
     background-color: #d4edda;
+    border: 2px solid black;
 }
 
 #resume-button{
@@ -116,7 +118,13 @@ html,body{
 .jb-button{
     border:none;
     background-color:white;
-    color:#d4edda;
+    color:black;
+    cursor:pointer;
+}
+.resume-button{
+    border:none;
+    background-color:white;
+    color:black;
     cursor:pointer;
 }
 #job-file-upload input[type="file"] ,#resume-file-upload input[type="file"]{
@@ -303,6 +311,8 @@ tr:hover {
 #resume-list-div{
     display: flex;
     flex-wrap: wrap;
+    overflow: auto;
+    border: 2px solid black;
 }
 .resume-cross-buttons{
     height:10px;
@@ -399,4 +409,8 @@ th {
     margin-left: 40px;
     background-color: #d4edda;
     border-radius: 5px;
+}
+.copy-paste-button{
+    border: none;
+    background-color: white;
 }
