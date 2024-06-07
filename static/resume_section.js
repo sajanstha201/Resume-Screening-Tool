@@ -49,6 +49,7 @@ function uploadResume() {
         objectStore.add({name:textInput.value.slice(0,20),content:textInput.value})
         transaction.oncomplete=(event)=>{
             console.log("Text resume added to the database");
+            
             showUploadedResume()
             textInput.value=''
         }
@@ -152,6 +153,7 @@ function uploadResume() {
             console.error(event.target.error);
         }
     }
+    document.getElementById('resume-list-outer-div').style.display='flex';
     }
 //this is for showing all the uploaded file in the table form after adding
 function showUploadedResume() {
