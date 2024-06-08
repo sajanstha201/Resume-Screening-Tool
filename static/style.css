@@ -77,7 +77,7 @@ html,body{
 .file-upload{
     display:flex;
     width:80%;
-    border: 2px dashed #ccc;
+    border: 2px dashed;
     border-radius:10px;
     padding: 10px;
     align-items:center;
@@ -90,7 +90,7 @@ html,body{
 #resume-file-upload,#resume-file-upload-text{
     display:flex;
     width:80%;
-    border: 2px dashed #ccc;
+    border: 2px dashed;
     border-radius:10px;
     padding: 10px;
     align-items:center;
@@ -99,6 +99,8 @@ html,body{
     margin:50px;
     flex-direction:column;
     margin:0px;
+    border-color:black;
+
 }
 #job-file-upload-text,#resume-file-upload-text{
     display:none;
@@ -424,4 +426,7 @@ th {
 .copy-paste-button{
     border: none;
     background-color: white;
+}
+.active{
+    border-color: yellowgreen;
 }
