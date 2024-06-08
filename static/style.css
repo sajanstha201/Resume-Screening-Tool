@@ -148,14 +148,16 @@ html,body{
     cursor: pointer;
 }
 .button{
-    height:30px;
     width:100px;
+    height: 40px;
+    border-radius: 10px;
+    margin:10px;
 }
 #previous-button{
     display:none;
 }
 #submit-button{
-    margin:10px;
+    background-color: #d4edda;
 }
 table {
     width: 40%;
@@ -276,8 +278,8 @@ tr:hover {
     opacity: 1;
 }
 .blur-box{
-    position:absolute;
-    height: 100%;
+    position:fixed;
+    height: 300vh;
     width:100%;
     background: rgba(255, 255, 255, 0.9);
     border: 0px solid #ccc;
@@ -318,11 +320,11 @@ tr:hover {
     justify-content: center;
     padding: 20px;
     border-radius:20px;
-    width: 60%;
+    width: 100%;
     height:50vh;
 }
 #resume-list-outer-div{
-    display: none;
+    display: flex;
     align-items: center;
     width: 100%;
     flex-direction: column;
@@ -401,7 +403,7 @@ th {
     position:absolute;
 }
 #loader-box{
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 100%;
     display: none;
@@ -427,6 +429,25 @@ th {
     border: none;
     background-color: white;
 }
+#resume-list-outer-div2{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+    width: 60%;
+}
+#add-resume-button{
+    display: none;
+    width: 100px;
+    height: 40px;
+}
+#submit-div{
+    display: flex;
+    margin-bottom: 100px;
+
+}
+#remove-all-button{
+    background-color: lightcoral;
 .active{
     border-color: yellowgreen;
 }

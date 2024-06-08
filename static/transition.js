@@ -7,6 +7,7 @@ function disable_job_file(){
 // this is for disabling the upload mode and enablign the textarea
 function disable_resume_file(){
     resume_file_activate=false;
+    document.getElementById('add-resume-button').style.display='block';
     document.getElementById('resume-content-file').value=''
     document.getElementById('resume-file-upload').style.display='none';
     document.getElementById('resume-file-upload-text').style.display='flex';
@@ -20,11 +21,37 @@ function disable_job_text(){
 // this is for disabling the textarea and enabling the upload mode
 function disable_resume_text(){
     resume_file_activate=true;
+    document.getElementById('add-resume-button').style.display='none';
     document.getElementById('resume-content-text').value='';
     document.getElementById('resume-file-upload-text').style.display='none';
     document.getElementById('resume-file-upload').style.display='flex'
 }
 //this is for going to the resume upload area
+async function activateResult(){
+    return new Promise((resolve,reject)=>{
+        var final_resume_list={}
+        const dbName = "resume_list";
+        const request = indexedDB.open(dbName);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(["resumes"], "readonly"); 
+            const objectStore = transaction.objectStore("resumes");
+            const request = objectStore.getAll();
+            request.onsuccess = (event) => {
+                const allItems = event.target.result;
+                document.getElementById('result').style.display=(allItems.length==0)?'none':'flex';
+                resolve(true)
+            }
+            request.onerror=(event)=>{
+                reject(event.target.error)
+            }
+        }
+        request.onerror = (event) => {
+            reject(event.target.error)
+            console.error('Error retrieving items:', event.target.error);
+        }
+    })
+}
 function go_to_resume(){
     if(section_selected===1){
         get_job_description();
@@ -45,9 +72,10 @@ function go_to_resume(){
         document.getElementById('rating-button').style.background='white';
     }
     section_selected=2;
+
     document.getElementById('resume').style.display='flex'
     //document.getElementById('previous-button').style.display='block'
-    document.getElementById('result').style.display='flex';
+    activateResult();
     document.getElementById('resume-button').style.background='#d4edda';
     document.getElementById('uploading').style.display='flex';
     document.getElementById('resume-button').style.border='2px solid black';

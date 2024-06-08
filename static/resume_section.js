@@ -153,8 +153,9 @@ function uploadResume() {
             console.error(event.target.error);
         }
     }
-    document.getElementById('resume-list-outer-div').style.display='flex';
-    }
+    
+    document.getElementById('result').style.display='flex';
+}
 //this is for showing all the uploaded file in the table form after adding
 function showUploadedResume() {
 const dbName = "resume_list";
@@ -168,6 +169,9 @@ request.onsuccess = (event) => {
         const allItems = event.target.result;
         const list=document.getElementById('resume-list-div');
         list.innerHTML=''
+        if(allItems.length==0){
+            document.getElementById('result').style.display='none';
+        }
         for(let i=0;i<allItems.length;i++){   
             id=allItems[i].name
             const Text='<div id="resume-pdf"><p>'+allItems[i].name+'</p></div><div class="resume-cross-buttons" id="'+id+'" onclick="remove_pdf(this)">x</div>'
@@ -317,3 +321,48 @@ async function get_resume_details_from_indexdb(){
         }
     })
 }
+//this will delete all the resume file that was uploaded 
+async function deleteAllResume() {
+    const dbName = "resume_list";
+    const request = indexedDB.open(dbName);
+    request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction(["resumes"], "readwrite");
+        const objectStore = transaction.objectStore("resumes");
+
+        objectStore.openCursor().onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+                const deleteRequest = cursor.delete();
+                deleteRequest.onsuccess = () => {
+                    console.log(`Deleted record with key ${cursor.primaryKey}`);
+                };
+                deleteRequest.onerror = (event) => {
+                    console.error(`Failed to delete record with key ${cursor.primaryKey}: ${event.target.error}`);
+                };
+                cursor.continue(); // Move to the next record
+            } else {
+                // All records have been deleted
+                showUploadedResume(); // Update the UI after all deletions are complete
+            }
+        };
+
+        objectStore.openCursor().onerror = (event) => {
+            console.error(`Failed to open cursor: ${event.target.error}`);
+        };
+
+        transaction.oncomplete = () => {
+            document.getElementById('result').style.display='none';
+            console.log("Deleted all resumes");
+        };
+
+        transaction.onerror = (event) => {
+            console.error(`Transaction failed: ${event.target.error}`);
+        };
+    };
+
+    request.onerror = (event) => {
+        console.error(`Failed to open database: ${event.target.error}`);
+    };
+}
+
