@@ -4,7 +4,8 @@ container2.addEventListener(
     (e)=>{
         e.preventDefault();
         e.stopPropagation();
-        container.classList.add('active')
+        container2.style.borderColor="red"
+        console.log("hi1")
     }
 )
 
@@ -13,7 +14,8 @@ container2.addEventListener(
     (e) => {
       e.preventDefault();
       e.stopPropagation();
-      container2.classList.remove('active')
+      container2.style.borderColor="black"
+      console.log("hi2")
     },
     false
   );
@@ -23,7 +25,21 @@ container2.addEventListener(
     (e) => {
       e.preventDefault();
       e.stopPropagation();
-      container2.classList.add('active')
+      container2.style.borderBlockColor="red"
+      console.log("hi3")
     },
     false
   );
+  container2.addEventListener(
+    "drop",
+    (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        container2.style.borderColor='black';
+        let dragged_data=e.dataTransfer
+        let files=dragged_data.files
+        jb_description_selected=true;
+        console.log(files)
+        
+}
+)
