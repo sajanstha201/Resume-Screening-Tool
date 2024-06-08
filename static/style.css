@@ -322,7 +322,7 @@ tr:hover {
     height:50vh;
 }
 #resume-list-outer-div{
-    display: none;
+    display: flex;
     align-items: center;
     width: 100%;
     flex-direction: column;
@@ -436,9 +436,11 @@ th {
 }
 #add-resume-button{
     display: none;
+    width: 100px;
+    height: 40px;
 }
 #submit-div{
-    display: none;
+    display: flex;
     margin-bottom: 100px;
 
 }
