@@ -7,6 +7,7 @@ function disable_job_file(){
 // this is for disabling the upload mode and enablign the textarea
 function disable_resume_file(){
     resume_file_activate=false;
+    document.getElementById('add-resume-button').style.display='block';
     document.getElementById('resume-content-file').value=''
     document.getElementById('resume-file-upload').style.display='none';
     document.getElementById('resume-file-upload-text').style.display='flex';

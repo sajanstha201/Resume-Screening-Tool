@@ -153,8 +153,11 @@ function uploadResume() {
             console.error(event.target.error);
         }
     }
+    
     document.getElementById('resume-list-outer-div').style.display='flex';
-    }
+    document.getElementById('submit-div').style.display='flex';
+
+}
 //this is for showing all the uploaded file in the table form after adding
 function showUploadedResume() {
 const dbName = "resume_list";
@@ -316,4 +319,8 @@ async function get_resume_details_from_indexdb(){
             console.error('Error retrieving items:', event.target.error);
         }
     })
+}
+//this will delete all the resume file that was uploaded 
+async function deleteAllResume(){
+    
 }
