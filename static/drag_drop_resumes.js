@@ -40,7 +40,12 @@ container2.addEventListener(
       console.log(files)
       const dataTransfer=new DataTransfer();
       for(i=0;i<files.length;i++){
-        dataTransfer.items.add(files[i])
+        if(files[i].name.endsWith('.pdf')|| files[i].name.endsWith('.docx')){
+          dataTransfer.items.add(files[i])
+        }
+        else{
+          alert_message('Invalid File')
+        }
       }
       document.getElementById('resume-content-file').files=dataTransfer.files;
       uploadResume();

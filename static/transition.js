@@ -100,13 +100,16 @@ function go_to_jb(){
     document.getElementById('uploading').style.display='flex';
 }
 function go_to_rating(){
+    if(!resumeSelected){
+        alert_message('No resume Selected')
+        return;
+    }
     if(section_selected===1){
         get_job_description();
         if(!jb_description_selected){
             return;
         }
         document.getElementById('jb').style.display='none';
-        
     }
     else if(section_selected===2){
         document.getElementById('resume').style.display='none';

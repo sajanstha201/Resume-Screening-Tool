@@ -179,7 +179,9 @@ request.onsuccess = (event) => {
         list.innerHTML=''
         if(allItems.length==0){
             document.getElementById('result').style.display='none';
+            resumeSelected=false;
         }
+        resumeSelected=true;
         for(let i=0;i<allItems.length;i++){   
             id=allItems[i].name
             const Text='<div id="resume-pdf"><p>'+allItems[i].name+'</p></div><div class="resume-cross-buttons" id="'+id+'" onclick="remove_pdf(this)">x</div>'
@@ -352,6 +354,7 @@ async function deleteAllResume() {
             } else {
                 // All records have been deleted
                 showUploadedResume(); // Update the UI after all deletions are complete
+                resumeSelected=false;
             }
         };
 
