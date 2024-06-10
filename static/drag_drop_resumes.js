@@ -1,5 +1,6 @@
 let container2=document.getElementById('resume-file-upload')
 container2.addEventListener(
+
   "dragenter",
   (e)=>{
       e.preventDefault();
