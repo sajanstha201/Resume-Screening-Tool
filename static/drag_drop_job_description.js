@@ -42,10 +42,17 @@ container.addEventListener(
             }
         else{
         jb_description_selected=true;
-        const dataTransfer =new DataTransfer();
-        dataTransfer.items.add(files[0]);
-        document.getElementById('job-description-file').files=dataTransfer.files;
-        display_jb_description_file(true)
+        console.log(files[0].name)
+        if(files[0].name.endsWith('.pdf')|| files[0].name.endsWith('.docx')){
+          const dataTransfer =new DataTransfer();
+          dataTransfer.items.add(files[0]);
+          document.getElementById('job-description-file').files=dataTransfer.files;
+          display_jb_description_file(true)
+        }
+        else{
+          alert_message('Invalid File')
+        }
+
         }
 }
 )
