@@ -3,6 +3,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def find_cosine_similairty(text1,text2):
+    if not text1 or not text2:
+        return 0
     tokenizer=BertTokenizer.from_pretrained('bert-base-uncased')
     model=TFBertModel.from_pretrained('bert-base-uncased')
     output1=model(tokenizer(text1,return_tensors='tf',padding=True,truncation=True))

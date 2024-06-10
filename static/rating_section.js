@@ -13,8 +13,6 @@ function display_rating_score(score){
         }
         table_body.innerHTML+='<tr><td>'+key+'<td>'+score[key]+'</td><td>'+checked_star+unchecked_star+'</td></td></tr>'
     }
-
-
 }
 async function submitResume(){
     document.getElementById('loader-box').style.display='flex';
