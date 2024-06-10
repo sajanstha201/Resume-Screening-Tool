@@ -45,7 +45,6 @@ container.addEventListener(
         jb_description_selected=true;
         const reader = new FileReader()
         let file=files[0]
-        console.log(file)
         }
 }
 )
