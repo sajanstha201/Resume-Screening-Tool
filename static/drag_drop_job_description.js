@@ -36,16 +36,16 @@ container.addEventListener(
         container.classList.remove("active")
         let dragged_data=e.dataTransfer
         let files=dragged_data.files
-        if (files.length!=1)
-            {
+        if (files.length!=1){
                 let message="multiple files uploaded"
                 alert_message(message)
             }
         else{
         jb_description_selected=true;
-        const reader = new FileReader()
-        let file=files[0]
-        console.log(file)
+        const dataTransfer =new DataTransfer();
+        dataTransfer.items.add(files[0]);
+        document.getElementById('job-description-file').files=dataTransfer.files;
+        display_jb_description_file(true)
         }
 }
 )

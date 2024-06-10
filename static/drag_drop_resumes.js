@@ -1,45 +1,48 @@
 let container2=document.getElementById('resume-file-upload')
 container2.addEventListener(
-    "dragenter",
-    (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        container2.style.borderColor="red"
-        console.log("hi1")
-    }
+
+  "dragenter",
+  (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      container2.classList.add('active')
+  }
 )
 
 container2.addEventListener(
-    "dragleave",
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      container2.style.borderColor="black"
-      console.log("hi2")
-    },
-    false
-  );
+  "dragleave",
+  (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    container2.classList.remove("active")
+  },
+  false
+);
 
-  container2.addEventListener(
-    "dragover",
-    (e) => {
+container2.addEventListener(
+  "dragover",
+  (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    container2.classList.add("active")
+  },
+  false
+);
+
+container2.addEventListener(
+  "drop",
+  (e)=>{
       e.preventDefault();
       e.stopPropagation();
-      container2.style.borderBlockColor="red"
-      console.log("hi3")
-    },
-    false
-  );
-  container2.addEventListener(
-    "drop",
-    (e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        container2.style.borderColor='black';
-        let dragged_data=e.dataTransfer
-        let files=dragged_data.files
-        jb_description_selected=true;
-        console.log(files)
-        
+      container2.classList.remove("active")
+      let dragged_data=e.dataTransfer
+      let files=dragged_data.files
+      console.log(files)
+      const dataTransfer=new DataTransfer();
+      for(i=0;i<files.length;i++){
+        dataTransfer.items.add(files[i])
+      }
+      document.getElementById('resume-content-file').files=dataTransfer.files;
+      uploadResume();
 }
 )
