@@ -4,6 +4,7 @@ let jb_file_activate=true;
 let jb_description_selected=false;
 let job_description_details={name:'',content:''}
 let section_selected=1;
+let resumeSelected=false;
 const dbName = "resume_list";
 const dbVersion = 2;
 const deleteRequest=indexedDB.deleteDatabase(dbName);
