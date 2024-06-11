@@ -27,3 +27,18 @@ function alert_message(message){
     var pElement=alert_div.querySelector('p');
     pElement.textContent=message;
 }
+function showAlert(message, type) {
+    const alertContainer = document.getElementById('alert-container');
+    const alert = document.createElement('div');
+    alert.style.backgroundColor=type;
+    alert.style.padding='15px'
+    alert.style.borderRadius='5px'
+    alert.innerText = message;
+    alertContainer.appendChild(alert);
+    setTimeout(() => {
+        alert.classList.add('hidden');
+        setTimeout(() => {
+            alert.remove();
+        }, 500);
+    }, 2000);
+}

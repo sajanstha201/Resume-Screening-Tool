@@ -53,6 +53,7 @@ async function activateResult(){
     })
 }
 function go_to_resume(){
+    showAlert('helelo lsfjsl','red')
     if(section_selected===1){
         get_job_description();
         if(!jb_description_selected){
