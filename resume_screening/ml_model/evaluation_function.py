@@ -15,7 +15,7 @@ def find_cosine_similairty(text1,text2):
 
 def calculate_match_score(critical_list,text_list):
     n_of_keyword_match=sum(1 for key in critical_list if key in text_list)
-    keyword_score=n_of_keyword_match/len(critical_list)
+    keyword_score=n_of_keyword_match/(len(critical_list)+1)
     return keyword_score
 
 def find_cosine_similarity2(text1,text2):
