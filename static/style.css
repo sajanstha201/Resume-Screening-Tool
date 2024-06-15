@@ -349,7 +349,9 @@ tr:hover {
 }
 #continue-button{
     border:2px solid black;
+    border-radius: 5px;
     background-color:white;
+    background-color: #d4edda;
     color:black;
     cursor:pointer;
     position: absolute;
@@ -439,7 +441,10 @@ th {
 #add-resume-button{
     display: none;
     width: 100px;
-    height: 40px;
+    height: 100px;
+    margin:30px;
+    border-radius: 5px;
+    background-color: #d4edda;
 }
 #submit-div{
     display: flex;

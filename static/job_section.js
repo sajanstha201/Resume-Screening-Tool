@@ -1,3 +1,4 @@
+//this is for saving the job description form text area or input file and that value wil be saved in the job description detail variable
 function get_job_description(){
     const job_desc_pdf=document.getElementById('job-description-file')
     const job_desc_text=document.getElementById('job-description-text')
@@ -65,7 +66,7 @@ function get_job_description(){
         job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
     }
 }
-
+//this will display the job description that was uploaded by the user as a box with the name of the folder
 function display_jb_description_file(display_folder){
     var div_=document.getElementById('instance-job-description');
     var label_=document.getElementById('job-description-label');
