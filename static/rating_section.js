@@ -1,4 +1,3 @@
-
 function display_rating_score(score){
     var table_body=document.getElementById('table-body');
     table_body.innerHTML=""
@@ -52,13 +51,13 @@ async function request_token(){
                 if(response.ok){
                     return response.json(resume_data)
                 }
-                alert_message('GOT SOME ERROR!!')
+                showAlert('GOT SOME ERROR!!','red')
                 document.getElementById('loader-box').style.display='none';
                 reject('error detected')
             }).then((data)=>{
                 resolve(data);
             }).catch(error=>{
-                alert_message('GOT SOME ERROR!!: ')
+                showAlert('GOT SOME ERROR!!: ','red')
                 document.getElementById('loader-box').style.display='none';
                 reject(error.target.value)
             })
@@ -91,7 +90,7 @@ async function download_pdf(){
             window.URL.revokeObjectURL(url)
         })
         .catch((error)=>{
-            alert_message('Error: ',error.target.value)
+            showAlert('Error: '+error.target.value,'red')
             reject(error.target.value)
         })
     activate_loader(false);

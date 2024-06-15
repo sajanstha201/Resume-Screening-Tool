@@ -1,3 +1,4 @@
+//this is for saving the job description form text area or input file and that value wil be saved in the job description detail variable
 function get_job_description(){
     const job_desc_pdf=document.getElementById('job-description-file')
     const job_desc_text=document.getElementById('job-description-text')
@@ -5,7 +6,7 @@ function get_job_description(){
     if(jb_file_activate){
         if(job_description_files.length===0){
             jb_description_selected=false;
-            alert_message("No file selected")
+            showAlert("No file selected",'red')
             return;
         }
         jb_description_selected=true;
@@ -44,13 +45,13 @@ function get_job_description(){
                         'content':text.value};
                 })
                 .catch(function(err) {
-                    alert_message('Error During Reading the File')
+                    showAlert('Error During Reading the File','red')
                   console.log(err);
                 });
             };
         }
         reader.onerror=(event)=>{
-            alert_message('Error During Reading the File')
+            showAlert('Error During Reading the File','red')
             console.error(event.target.error)
         }
         reader.readAsArrayBuffer(job_description_files[0]);
@@ -58,14 +59,14 @@ function get_job_description(){
     else{
         if(job_desc_text.value.trim()===""){
             jb_description_selected=false;
-            alert_message("Empty Textarea")
+            showAlert("Empty Textarea",'red')
             return;
         }
         jb_description_selected=true;
         job_description_details={name:job_desc_text.value.slice(0,20),content:job_desc_text.value}
     }
 }
-
+//this will display the job description that was uploaded by the user as a box with the name of the folder
 function display_jb_description_file(display_folder){
     var div_=document.getElementById('instance-job-description');
     var label_=document.getElementById('job-description-label');

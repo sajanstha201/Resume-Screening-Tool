@@ -38,7 +38,7 @@ container.addEventListener(
         let files=dragged_data.files
         if (files.length!=1){
                 let message="multiple files uploaded"
-                alert_message(message)
+                showAlert(message,'red')
             }
         else{
         jb_description_selected=true;
@@ -50,7 +50,7 @@ container.addEventListener(
           display_jb_description_file(true)
         }
         else{
-          alert_message('Invalid File')
+          showAlert('Invalid File','red')
         }
 
         }
