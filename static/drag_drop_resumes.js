@@ -44,7 +44,7 @@ container2.addEventListener(
           dataTransfer.items.add(files[i])
         }
         else{
-          alert_message('Invalid File')
+          showAlert('Invalid File','red')
         }
       }
       document.getElementById('resume-content-file').files=dataTransfer.files;

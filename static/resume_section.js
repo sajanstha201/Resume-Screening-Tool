@@ -39,7 +39,7 @@ function uploadResume() {
     const request = indexedDB.open(dbName);
     if(!resume_file_activate){
         if(textInput.value.trim()===""){
-            alert_message("Empty Textarea");
+            showAlert("Empty Textarea",'red');
             return;
         }
         request.onsuccess=(event)=>{
@@ -68,7 +68,7 @@ function uploadResume() {
     }
     else{
         if(selectedFiles.length===0){
-            alert_message("No File Selected")
+            showAlert("No File Selected",'red')
             return;
         }
         activate_loader(true);
@@ -115,7 +115,7 @@ function uploadResume() {
                             })
                             .catch(function(err) {
                                 activate_loader(false)
-                                alert_message('Error During Reading the File')          
+                                showAlert('Error During Reading the File','red')          
                             console.log(err);
                             reject(err.target.value)
                             
@@ -124,7 +124,7 @@ function uploadResume() {
                     }
                     reader.onerror=(event)=>{ 
                         activate_loader(false)
-                        alert_message('Error During Reading the File')
+                        showAlert('Error During Reading the File','red')
                         console.error(event.target.error)
                         reject(err.target.value)
                     }
@@ -134,7 +134,7 @@ function uploadResume() {
             }
             else{
                 const str='Duplicate Document Detected: '+file.name
-                alert_message(str)
+                showAlert(str,'red')
             }
         }
         try{

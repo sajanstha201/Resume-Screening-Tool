@@ -458,3 +458,6 @@ th {
     right: 20px;
     z-index: 1000;
   }
+#alert-container div{
+    margin: 10px;
+}

@@ -5,7 +5,7 @@ function get_job_description(){
     if(jb_file_activate){
         if(job_description_files.length===0){
             jb_description_selected=false;
-            alert_message("No file selected")
+            showAlert("No file selected",'red')
             return;
         }
         jb_description_selected=true;
@@ -44,13 +44,13 @@ function get_job_description(){
                         'content':text.value};
                 })
                 .catch(function(err) {
-                    alert_message('Error During Reading the File')
+                    showAlert('Error During Reading the File','red')
                   console.log(err);
                 });
             };
         }
         reader.onerror=(event)=>{
-            alert_message('Error During Reading the File')
+            showAlert('Error During Reading the File','red')
             console.error(event.target.error)
         }
         reader.readAsArrayBuffer(job_description_files[0]);
@@ -58,7 +58,7 @@ function get_job_description(){
     else{
         if(job_desc_text.value.trim()===""){
             jb_description_selected=false;
-            alert_message("Empty Textarea")
+            showAlert("Empty Textarea",'red')
             return;
         }
         jb_description_selected=true;
